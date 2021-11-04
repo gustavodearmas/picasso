@@ -24,6 +24,10 @@ module.exports = {
           3: "#27BFC2"
         }
       },
+      fontSize: {
+        'xxs': '.5rem',
+        'xxxs': '.25rem',
+      }
     },
   },
   variants: {
