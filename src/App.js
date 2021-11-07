@@ -21,7 +21,7 @@ function App() {
             <Header />
           
           <div className="bg-white h-full pt-20">hola</div>
-          <div className="bg-black h-10">footer</div>
+          <div className="bg-black h-10">footer__</div>
         </div>
       </div>
     </>
