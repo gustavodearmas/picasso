@@ -23514,11 +23514,7 @@ video {
 }
 
 .text-xxs {
-  font-size: .5rem;
-}
-
-.text-xxxs {
-  font-size: .25rem;
+  font-size: .6rem;
 }
 
 .font-thin {
@@ -54796,11 +54792,7 @@ video {
   }
 
   .sm\:text-xxs {
-    font-size: .5rem;
-  }
-
-  .sm\:text-xxxs {
-    font-size: .25rem;
+    font-size: .6rem;
   }
 
   .sm\:font-thin {
@@ -86066,11 +86058,7 @@ video {
   }
 
   .md\:text-xxs {
-    font-size: .5rem;
-  }
-
-  .md\:text-xxxs {
-    font-size: .25rem;
+    font-size: .6rem;
   }
 
   .md\:font-thin {
@@ -117336,11 +117324,7 @@ video {
   }
 
   .lg\:text-xxs {
-    font-size: .5rem;
-  }
-
-  .lg\:text-xxxs {
-    font-size: .25rem;
+    font-size: .6rem;
   }
 
   .lg\:font-thin {
@@ -148606,11 +148590,7 @@ video {
   }
 
   .xl\:text-xxs {
-    font-size: .5rem;
-  }
-
-  .xl\:text-xxxs {
-    font-size: .25rem;
+    font-size: .6rem;
   }
 
   .xl\:font-thin {
@@ -179876,11 +179856,7 @@ video {
   }
 
   .\32xl\:text-xxs {
-    font-size: .5rem;
-  }
-
-  .\32xl\:text-xxxs {
-    font-size: .25rem;
+    font-size: .6rem;
   }
 
   .\32xl\:font-thin {

@@ -25,10 +25,9 @@ module.exports = {
         }
       },
       fontSize: {
-        'xxs': '.5rem',
-        'xxxs': '.25rem',
-      }
-    },
+        'xxs': '.6rem'
+      }, 
+    }
   },
   variants: {
     extend: {},
