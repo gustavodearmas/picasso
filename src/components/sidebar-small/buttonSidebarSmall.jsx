@@ -4,14 +4,14 @@ const ButtonSidebarSamll = ({title}) => {
   return (
     <>
       <a
-        className="w-full h-10 text-white-800 flex items-center justify-center my-5" //add : border-white  border-l-2 
+        className="h-10 text-white-800 flex my-5" //add : border-white  border-l-2 
         href="#"
       >
-        <div className="m-auto items-center relative text-white" >
-          <div className="block items-center ">
+        <div className="m-auto text-white" >
+          <div className="">
           <i class="fas fa-abacus"></i>
           </div>
-          <div className="block">
+          <div className="">
             <p className="text-white text-xxs">{title}</p>
           </div>
         </div>
