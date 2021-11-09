@@ -18,19 +18,23 @@ module.exports = {
           4: "#BACC61",
           5: "#D0DC8E",
         },
-        parotia:{
+        parotia: {
           1: "#262632",
           2: "#303040",
-          3: "#27BFC2"
-        }
+          3: "#27BFC2",
+        },
       },
       fontSize: {
-        'xxs': '.6rem'
-      }, 
-    }
+        xxs: ".6rem",
+      },
+      screens: {
+        xxs: "320px",
+        cero: "100px"
+      },
+    },
+    variants: {
+      extend: {},
+    },
+    plugins: [],
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
 };
