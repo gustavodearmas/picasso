@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AvatarImage from "../../images/no-avatar.png";
 import ButtonBorder from "../../components/buttoms/buttonBorder";
 import ButtomBackground from "../../components/buttoms/buttomBackground";
@@ -8,12 +8,27 @@ import IconKeyValueX2 from "../../components/user/iconKeyValueX2";
 import IconKeyValue2x1 from "../../components/user/iconKeyValue2x1";
 import EditUser from "./editUser";
 import ButtomBig from "../../components/buttoms/buttomBig";
+import { GET_USERS } from "../../graphql/user/querys";
+import toast from 'react-hot-toast';
+import { useQuery } from "@apollo/client";
 
 const IndexUser = () => {
   const [editUser, setEditUser] = useState(false);
+  const { data, error, loading } = useQuery(GET_USERS);
+
+console.log("data: ", data)
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error consultando los usuarios');
+    }
+  }, [error]);
+
   return (
     <>
-     {editUser ? <EditUser  setEditUser={setEditUser}/> : <></>}
+    
+      {editUser ? <EditUser setEditUser={setEditUser} /> : <></>}
+      
       {/* Header */}
       <div className="flex flex-row justify-end">
         <div className="flex items-center w-auto text-sm ">
@@ -22,15 +37,12 @@ const IndexUser = () => {
             type="text"
             placeholder="Buscar..."
           />
-        
-          <ButtomBig text="Nuevo"/>
-          <ButtomBig text="Importar" bg="bg-gray-700"/>
-        
+
+          <ButtomBig text="Nuevo" />
+          <ButtomBig text="Importar" bg="bg-gray-700" />
         </div>
       </div>
       {/* Header */}
-
-      
 
       {/* Content */}
       <div className="h-full flex flex-col lg:flex-row mt-4">
@@ -91,7 +103,7 @@ const IndexUser = () => {
         {/* Card_1 - Lista de usuarios */}
 
         {/* Card_2 - Información de Usuario*/}
-        <div className="shadow-md rounded flex-1 bg-gray-50 px-4 pt-8">
+        <div className="shadow-md rounded flex-1 bg-gray-50 px-4 py-8 overflow-auto">
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center ">
               <img
@@ -117,7 +129,9 @@ const IndexUser = () => {
             <ButtonBorder
               icon="far fa-edit"
               cssAdd="mr-1 hover:border-parotia-3 hover:text-parotia-3"
-              onclick={()=>{setEditUser(true)}}
+              onclick={() => {
+                setEditUser(true);
+              }}
             />
             <ButtonBorder
               icon="far fa-trash-alt"
@@ -129,9 +143,8 @@ const IndexUser = () => {
             <IconKeyValue
               icon="fas fa-id-badge"
               key_="Identificación"
-              value_="1119383764"
+              value_="CC 1118833976"
             />
-            <IconKeyValue icon="fas fa-filter" key_="Tipo" value_="CC" />
             <IconKeyValue2x1
               icon="fas fa-user"
               key_="Nombre"
@@ -139,34 +152,112 @@ const IndexUser = () => {
               value_2="Carolina"
               value_3="Gonzalez"
             />
+
+            <IconKeyValue
+              icon="fas fa-id-badge"
+              key_="Ciudad de Nacimiento"
+              value_="Colombia"
+            />
+               <IconKeyValue
+              icon="fas fa-id-badge"
+              key_="Nacionalidad"
+              value_="Colombiano"
+            />
             <IconKeyValueX2
               icon="fas fa-birthday-cake"
-              key_="Nacimiento"
+              key_="Fecha de Nacimiento"
               value_="22/12/1990"
               value_2="20 años"
             />
             <IconKeyValue icon="fas fa-syringe" key_="RH" value_="O-" />
-            <IconKeyValue
-              icon="fas fa-map-marker-alt"
-              key_="Dirección"
-              value_="Calle 12C # 12 - 12"
-            />
+          
             <IconKeyValue
               icon="fas fa-envelope"
               key_="Email"
               value_="andres@hotmail.com"
             />
-            <IconKeyValue
+            <IconKeyValueX2
               icon="fas fa-phone-alt"
-              key_="Teléfono 1"
+              key_="Teléfono"
               value_="3286212"
+              value_2="3109876537"
             />
-            <IconKeyValue
-              icon="fas fa-mobile-alt"
-              key_="Celular"
-              value_="3109876537"
+              <IconKeyValue
+              icon="fas fa-medkit"
+              key_="EPS"
+              value_="Sura"
             />
+              <IconKeyValue
+              icon="fas fa-hand-holding-usd"
+              key_="ARL"
+              value_="Liberty"
+            />
+              <IconKeyValue
+              icon="fas fa-blind"
+              key_="AFP"
+              value_="Colpensiones"
+            />
+              <IconKeyValue
+              icon="fas fa-map-marker-alt"
+              key_="Dirección"
+              value_="Calle 12C # 12 - 12"
+            />
+               <IconKeyValue
+              icon="fas fa-arrow-alt-circle-up"
+              key_="Estrato"
+              value_="3"
+            />
+               <IconKeyValueX2
+              icon="fas fa-map-marked-alt"
+              key_="UPZ/Localidad"
+              value_="San Luis"
+              value_2="Chapinero"
+            />
+                <IconKeyValue
+              icon="fas fa-arrow-alt-circle-up"
+              key_="Contato de Emergencia"
+              value_="323334545"
+            />
+          
+            
+           
+          
           </div>
+          <Line />
+          <h6 className="text-xs font-bold mt-4 mb-8">Acudiente</h6>
+          <IconKeyValue2x1
+            icon="fas fa-user"
+            key_="Nombre"
+            value_="Andrea"
+            value_2="Carolina"
+            value_3="Gonzalez"
+          />
+          <IconKeyValue
+            icon="fas fa-id-badge"
+            key_="Identificación"
+            value_="CC 1118833976"
+          />
+          <IconKeyValue
+            icon="fas fa-users"
+            key_="Parentesco"
+            value_="Madre"
+          />
+         
+          <IconKeyValue
+            icon="fas fa-map-marker-alt"
+            key_="Dirección"
+            value_="Calle 78 # 20 - 43"
+          />
+          <IconKeyValue
+            icon="fas fa-envelope"
+            key_="Email"
+            value_="andres@hotmail.com"
+          />
+          <IconKeyValue
+            icon="fas fa-phone-alt"
+            key_="Teléfono"
+            value_="3120837434"
+          />
         </div>
         {/* Card_2 - Información de Usuario*/}
 
@@ -251,7 +342,5 @@ const DetailPay = () => {
     </div>
   );
 };
-
-
 
 export default IndexUser;

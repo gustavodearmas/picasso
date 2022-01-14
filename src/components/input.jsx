@@ -2,8 +2,8 @@ import React from "react";
 
 const Input = ({name, label, type, defaultValue, disabled}) => {
   return (
-    <div>
-      <label className="block mb-1 text-gray-600 font-semibold">
+    <div className="flex items-center my-1">
+      <label className="block text-gray-600 font-semibold text-xs font-bold mr-2 w-7/12">
         {label}
       </label>
       <input
@@ -11,7 +11,7 @@ const Input = ({name, label, type, defaultValue, disabled}) => {
         name={name}
         defaultValue={defaultValue}
         disabled={disabled}
-        className="bg-white px-4 py-2 outline-none rounded-md w-full"
+        className="bg-white px-2 py-1 outline-none rounded-md w-full text-xs w-5/12"
       />
     </div>
   );

@@ -3,11 +3,13 @@ import SidebarSmall from "../components/sidebar-small";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Outlet } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 
 const PrivateLayouth = () => {
   const [sidebarResponsive, setSidebarResponsive] = useState(false);
   return (
     <div className="flex flex-row h-screen ">
+
       {sidebarResponsive ? <SmallSidebar /> : <Sidebar_ />}
       <div className="bg-gray-100 flex-auto flex flex-col relative ">
         <div className="bg-parotia-3 pb-2 sticky">
@@ -29,6 +31,7 @@ const PrivateLayouth = () => {
         </div>
         <div className="m-1 flex-auto overflow-y-auto p-2">
           <Content>
+          <Toaster/>
             <Outlet />
           </Content>
         </div>
