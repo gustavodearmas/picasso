@@ -5,37 +5,45 @@ import Input from "../../components/input";
 import DropDown from "../../components/dropDown";
 import useFormData from "../../hook/userFormData";
 import Line from "../../components/Line";
-import { CREATE_USER } from "../../graphql/user/mutations";
+import { EDIT_USER } from "../../graphql/user/mutations";
 import { useMutation } from "@apollo/client";
 import toast from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 import {Enum_Role, Enum_AFP, Enum_ARL, Enum_EPS, Enum_Issuance, Enum_Locality, Enum_RH, Enum_StatusUsers} from '../../utils/enums'
 
 
-const EditUser = ({ setEditUser }) => {
-  const [
-    createUser,
-    { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation(CREATE_USER);
+const EditUser = ({ setEditUser, dataByID, refetch }) => {
   const { form, formData, updateFormData } = useFormData(null);
+  const navigate = useNavigate();
+  const [
+    editUser,
+    { data, loading, error},
+  ] = useMutation(EDIT_USER);
   const submitForm = (e) => {
     e.preventDefault();
+    formData._id = dataByID.User._id;
+    formData.strata = parseFloat(formData.strata)
     console.log("formData: ", formData)
-    formData.strata = parseFloat(FormData.strata);
-    createUser({variables: formData});
+    editUser({variables: formData});
   }
 
   useEffect(() => {
-    if(mutationData){
-      toast.success('Usuario modificado correctamente');
+    if(data){
+      setEditUser(false);
+      refetch();
+      toast.success("Usuario modificado con éxito");
+      return navigate("/admin/users");
+    
     }
-  }, [mutationData]);
+  }, [data]);
 
   useEffect(() => {
-    if(mutationError){
-      toast.error('Erro al intentat guardar el usuario');
+    if(error){
+      toast.error('Error al modificar el usuario');
     }
-    
-  }, [mutationError]);
+  }, [error]);
+
+  if(loading){return <div>Loding...</div>}
 
 
   return (
@@ -44,50 +52,50 @@ const EditUser = ({ setEditUser }) => {
       <form onSubmit={submitForm} onChange={updateFormData} ref={form}>
         <div className="flex">
           <div className="w-3/6 px-10">
-            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} />
-            <DropDown label="Rol" type="text" name="role" defaultValue="" options={Enum_Role} />
-            <Input label="Nombres" type="text" name="nameUser" defaultValue="" />
-            <Input label="Apellidos" type="text" name="lastName" defaultValue="" />
-            <Input label="Identificación" type="text" name="identification" defaultValue="" />
-            <Input label="Ciudad de Nacimiento" type="text" name="cityBirth" defaultValue="" />
-            <Input label="Nacionalidad" type="text" name="nationality" defaultValue="" />
-            <Input label="Fecha Nacimiento" type="text" name="birthDay" defaultValue="" />
-            <Input label="Email" type="text" name="email" defaultValue="" />
-            <Input label="Teléfono" type="text" name="phone" defaultValue="" />
-            <Input label="Celular" type="text" name="movil" defaultValue="" />
-            <Input label="Dirección" type="text" name="address" defaultValue="" />
-            <Input label="UPZ" type="text" name="UPZ" defaultValue="" />
-            <Input label="Estrato" type="number" name="strata" defaultValue="" />
-            <DropDown label="RH" name="RH" defaultValue = "" options={Enum_RH} />
-            
+            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} defaultValue={dataByID.User.statusUser} />
+            <DropDown label="Rol" type="text" name="role" defaultValue={dataByID.User.role}  options={Enum_Role} />
+            <Input label="Nombres" type="text" name="nameUser" defaultValue={dataByID.User.nameUser}  />
+            <Input label="Apellidos" type="text" name="lastName" defaultValue={dataByID.User.lastName}  />
+            <Input label="Identificación" type="text" name="identification" defaultValue={dataByID.User.identification}  />
+            <Input label="Ciudad de Nacimiento" type="text" name="cityBirth" defaultValue={dataByID.User.cityBirth}  />
+            <Input label="Nacionalidad" type="text" name="nationality" defaultValue={dataByID.User.nationality}  />
+            <Input label="Fecha Nacimiento" type="text" name="birthDay" defaultValue={dataByID.User.birthDay.slice(0,10)}  />
+            <Input label="Foto (url)" type="text" name="photo" defaultValue={dataByID.User.photo}  />
+            <Input label="Email" type="text" name="email" defaultValue={dataByID.User.email}  />
+            <Input label="Teléfono" type="text" name="phone" defaultValue={dataByID.User.phone}  />
+            <Input label="Celular" type="text" name="movil" defaultValue={dataByID.User.movil}  />
+            <Input label="Dirección" type="text" name="address" defaultValue={dataByID.User.address}  />
+            <Input label="UPZ" type="text" name="upz" defaultValue={dataByID.User.upz}  />
+            <Input label="Estrato" type="number" name="strata" defaultValue={dataByID.User.strata}  />
+            <DropDown label="rh" name="rh" defaultValue={dataByID.User.rh}  options={Enum_RH} />
            
           </div>
           <div className="w-3/6 px-10">
-            <DropDown label="Localidad" name="locality" defaultValue = "" options={Enum_Locality} />
-            <Input label="UPZ" type="text" name="UPZ" defaultValue = "" />
-            <DropDown label="EPS" name="EPS" defaultValue = "" options={Enum_EPS} />
-            <DropDown label="ARL" name="ARL" defaultValue = "" options={Enum_ARL}/>
-            <DropDown label="AFP" name="AFP" defaultValue = "" options={Enum_AFP}/>
-            <Input label="Contato de Emergencia" type="text" name="emergencyContact" defaultValue="" />
+            <DropDown label="Localidad" name="locality" defaultValue={dataByID.User.locality}  options={Enum_Locality} />
+            <DropDown label="EPS" name="eps" defaultValue={dataByID.User.eps}  options={Enum_EPS} />
+            <DropDown label="ARL" name="arl" defaultValue={dataByID.User.arl}  options={Enum_ARL}/>
+            <DropDown label="AFP" name="afp" defaultValue={dataByID.User.afp}  options={Enum_AFP}/>
+            <Input label="Contato de Emergencia" type="text" name="emergencyContact" defaultValue={dataByID.User.emergencyContact}  />
             <Line/>
-            <h6 className="text-md font-bold mt-2 mb-2">Acudiente</h6>
-            <Input label="Nombre" type="text" name="nameGuardian" defaultValue=""/>
-            <Input label="Apellido" type="text" name="lastNameGuardian" defaultValue=""/>
-            <Input label="Identificación" type="text" name="identificationGuardian" defaultValue=""/>
-            <DropDown label="Parentesco" name="issuance" defaultValue = "" options={Enum_Issuance}/>
-            <Input label="Email" type="email" name="emailGuardian" defaultValue=""/>
-            <Input label="Dirección" type="email" name="addressGuardian" defaultValue=""/>
-            <Input label="Teléfono" type="email" name="phoneGuardian" defaultValue=""/>
+            <h6 className="text-md font-bold mt-4 mb-6">Acudiente</h6>
+            <Input label="Nombre" type="text" name="nameGuardian" defaultValue={dataByID.User.nameGuardian} />
+            <Input label="Apellido" type="text" name="lastNameGuardian" defaultValue={dataByID.User.lastNameGuardian} />
+            <Input label="Identificación" type="text" name="identificationGuardian" defaultValue={dataByID.User.identificationGuardian} />
+            <DropDown label="Parentesco" name="issuance" defaultValue={dataByID.User.issuance}  options={Enum_Issuance}/>
+            <Input label="Email" type="email" name="emailGuardian" defaultValue={dataByID.User.emailGuardian} />
+            <Input label="Dirección" type="text" name="addressGuardian" defaultValue={dataByID.User.addressGuardian} />
+            <Input label="Teléfono" type="text" name="phoneGuardian" defaultValue={dataByID.User.phoneGuardian} />
           </div>
         </div>
         <div className="flex justify-end mt-2 px-10">
+        <ButtomBig text="Guardar" type="submit" />
           <ButtomBig
             text="Cerrar"
             onclick={() => {
               setEditUser(false);
             }}
           />
-          <ButtomBig text="Guardar" type="submit" />
+      
         </div>
       </form>
     </Modal>
@@ -95,30 +103,3 @@ const EditUser = ({ setEditUser }) => {
 };
 
 export default EditUser;
-
-//Diseño para danzaLibre
-{
-  /* <div className="flex flex-col">
-        <div className="flex">
-         <div className="flex flex-col w-5/24 mx-1">
-           <div className="bg-white mb-1 rounded-lg h-full">ff</div>
-           <div className="bg-white mt-1 rounded-lg h-full">ff</div>
-  
-         </div>
-         <div className="w-19/24 rounded-lg mx-1">
-           <div className="flex flex-col">
-             <div className="flex mb-2">
-              <div className="bg-white rounded-lg w-8/24 mr-1">f</div>
-              <div className="bg-white rounded-lg w-16/24 ml-1">b</div>
-             </div>
-             <div className="bg-white mb-2 rounded-lg">f</div>
-             <div className="bg-white rounded-lg">v</div>
-           </div>
-         </div>
-        </div>
-        <div className="flex justify-end mt-4">
-          <ButtomBig text="Cerrar" onclick={()=>{setEditUser(false)}} />
-          <ButtomBig text="Guardar" />
-        </div>
-        </div> */
-}

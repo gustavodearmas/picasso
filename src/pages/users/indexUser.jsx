@@ -6,28 +6,45 @@ import Line from "../../components/Line";
 import IconKeyValue from "../../components/user/iconKeyValue";
 import IconKeyValueX2 from "../../components/user/iconKeyValueX2";
 import IconKeyValue2x1 from "../../components/user/iconKeyValue2x1";
+import CreateUser from "./createUser";
 import EditUser from "./editUser";
 import ButtomBig from "../../components/buttoms/buttomBig";
-import { GET_USERS } from "../../graphql/user/querys";
+import { GET_USERS, GET_USER_BY_ID } from "../../graphql/user/querys";
 import toast from 'react-hot-toast';
 import { useQuery } from "@apollo/client";
 
 const IndexUser = () => {
+  const [createUser, setCreateUser] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const { data, error, loading } = useQuery(GET_USERS);
+  const [_id, setID] = useState("");
+  const {
+    data: dataByID,
+    errorByID,
+    loadingByID,
+    refetch
+  } = useQuery(GET_USER_BY_ID, { variables: { _id } });
 
-console.log("data: ", data)
+  console.log("data: ", data)
+  console.log("_id: ", _id)
+  console.log("dataByID: ", dataByID)
 
   useEffect(() => {
     if (error) {
       toast.error('Error consultando los usuarios');
     }
-  }, [error]);
+    if (errorByID) {
+      toast.error('Error consultando el usuario');
+    }
+  }, [error, errorByID]);
+
+  if(loading || loadingByID){return <div>Loding...</div>}
 
   return (
     <>
     
-      {editUser ? <EditUser setEditUser={setEditUser} /> : <></>}
+      {editUser ? <EditUser setEditUser={setEditUser} dataByID={dataByID} refetch={refetch} /> : <></>}
+      {createUser ? <CreateUser setCreateUser={setCreateUser} refetch={refetch} /> : <></>}
       
       {/* Header */}
       <div className="flex flex-row justify-end">
@@ -38,7 +55,7 @@ console.log("data: ", data)
             placeholder="Buscar..."
           />
 
-          <ButtomBig text="Nuevo" />
+          <ButtomBig text="Nuevo" onclick={()=>{setCreateUser(true)}} />
           <ButtomBig text="Importar" bg="bg-gray-700" />
         </div>
       </div>
@@ -79,24 +96,9 @@ console.log("data: ", data)
 
           {/* Componentes de Usuarios */}
           <div className="h-19/24 flex flex-col divide-y divide-gray-200 overflow-auto -mt-3">
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
-            <ItemsUser />
+            {data && data.Users.map((e, pos)=>{
+              return <ItemsUser k={pos} _idUser={e._id} nameUser={e.nameUser} lastName={e.lastName} statusUser={e.statusUser} setID={setID} photo={e.photo} />
+            })}
           </div>
           {/* Componentes de Usuarios */}
         </div>
@@ -143,120 +145,116 @@ console.log("data: ", data)
             <IconKeyValue
               icon="fas fa-id-badge"
               key_="Identificación"
-              value_="CC 1118833976"
+              value_={dataByID && dataByID.User.identification}
             />
             <IconKeyValue2x1
               icon="fas fa-user"
               key_="Nombre"
-              value_="Andrea"
-              value_2="Carolina"
-              value_3="Gonzalez"
+              value_={dataByID && dataByID.User.nameUser}
+              value_2={dataByID && dataByID.User.lastName}
+              value_3=""
             />
 
             <IconKeyValue
               icon="fas fa-id-badge"
               key_="Ciudad de Nacimiento"
-              value_="Colombia"
+              value_={dataByID && dataByID.User.cityBirth}
             />
                <IconKeyValue
               icon="fas fa-id-badge"
               key_="Nacionalidad"
-              value_="Colombiano"
+              value_={dataByID && dataByID.User.nationality}
             />
             <IconKeyValueX2
               icon="fas fa-birthday-cake"
               key_="Fecha de Nacimiento"
-              value_="22/12/1990"
-              value_2="20 años"
+              value_={dataByID && dataByID.User.birthDay.slice(0, 10)}
+              value_2="edad"
             />
-            <IconKeyValue icon="fas fa-syringe" key_="RH" value_="O-" />
+            <IconKeyValue icon="fas fa-syringe" key_="rh" value_="O-" />
           
             <IconKeyValue
               icon="fas fa-envelope"
               key_="Email"
-              value_="andres@hotmail.com"
+              value_={dataByID && dataByID.User.email}
             />
             <IconKeyValueX2
               icon="fas fa-phone-alt"
               key_="Teléfono"
               value_="3286212"
-              value_2="3109876537"
+              value_2={dataByID && dataByID.User.phone}
             />
               <IconKeyValue
               icon="fas fa-medkit"
-              key_="EPS"
-              value_="Sura"
+              key_="eps"
+              value_={dataByID && dataByID.User.eps}
             />
               <IconKeyValue
               icon="fas fa-hand-holding-usd"
-              key_="ARL"
-              value_="Liberty"
+              key_="arl"
+              value_={dataByID && dataByID.User.arl}
             />
               <IconKeyValue
               icon="fas fa-blind"
-              key_="AFP"
-              value_="Colpensiones"
+              key_="afp"
+              value_={dataByID && dataByID.User.afp}
             />
               <IconKeyValue
               icon="fas fa-map-marker-alt"
               key_="Dirección"
-              value_="Calle 12C # 12 - 12"
+              value_={dataByID && dataByID.User.address}
             />
                <IconKeyValue
               icon="fas fa-arrow-alt-circle-up"
               key_="Estrato"
-              value_="3"
+              value_={dataByID && dataByID.User.strata}
             />
                <IconKeyValueX2
               icon="fas fa-map-marked-alt"
-              key_="UPZ/Localidad"
-              value_="San Luis"
-              value_2="Chapinero"
+              key_="upz/Localidad"
+              value_={dataByID && dataByID.User.upz}
+              value_2={dataByID && dataByID.User.locality}
             />
                 <IconKeyValue
               icon="fas fa-arrow-alt-circle-up"
               key_="Contato de Emergencia"
-              value_="323334545"
+              value_={dataByID && dataByID.User.emergencyContact}
             />
-          
-            
-           
-          
           </div>
           <Line />
           <h6 className="text-xs font-bold mt-4 mb-8">Acudiente</h6>
           <IconKeyValue2x1
             icon="fas fa-user"
             key_="Nombre"
-            value_="Andrea"
-            value_2="Carolina"
-            value_3="Gonzalez"
+            value_={dataByID && dataByID.User.nameGuardian}
+            value_2={dataByID && dataByID.User.lastNameGuardian}
+            value_3=""
           />
           <IconKeyValue
             icon="fas fa-id-badge"
             key_="Identificación"
-            value_="CC 1118833976"
+            value_={dataByID && dataByID.User.identificationGuardian}
           />
           <IconKeyValue
             icon="fas fa-users"
             key_="Parentesco"
-            value_="Madre"
+            value_={dataByID && dataByID.User.issuance}
           />
          
           <IconKeyValue
             icon="fas fa-map-marker-alt"
             key_="Dirección"
-            value_="Calle 78 # 20 - 43"
+            value_={dataByID && dataByID.User.addressGuardian}
           />
           <IconKeyValue
             icon="fas fa-envelope"
             key_="Email"
-            value_="andres@hotmail.com"
+            value_={dataByID && dataByID.User.emailGuardian}
           />
           <IconKeyValue
             icon="fas fa-phone-alt"
             key_="Teléfono"
-            value_="3120837434"
+            value_={dataByID && dataByID.User.phoneGuardian}
           />
         </div>
         {/* Card_2 - Información de Usuario*/}
@@ -297,15 +295,16 @@ console.log("data: ", data)
   );
 };
 
-const ItemsUser = () => {
+const ItemsUser = ({k, _idUser, nameUser, lastName, statusUser, photo, setID}) => {
   return (
-    <div className="bg-gray-50 hover:bg-gray-100">
-      <div className="flex flex-row h-12 items-center px-4 ">
+
+    <div className="bg-gray-50 hover:bg-gray-100" onClick={()=>{setID(_idUser)}} key={k} > 
+      <div  className="flex flex-row h-12 items-center px-4">
         <div className="w-1/24 mr-2">
           <input className="h-3 w-3 rounded-full" type="checkbox" />
         </div>
 
-        <div className=" w-3/24 " src="" alt="">
+        <div className=" w-3/24" src="" alt="" >
           <div className="flex mx-auto rounded-full bg-gray-200 border-1 border-gray-100 justify-center w-8 h-8">
             <img
               className="object-cover object-center w-5 h-5 mt-1"
@@ -315,32 +314,34 @@ const ItemsUser = () => {
           </div>
         </div>
         <div className="w-17/24 mx-1">
-          <span className="text-xs">Gustavo De Armas Nuñez</span>
+          <span className="text-xs">{nameUser}{" "}{lastName}</span>
         </div>
         <div className="w-3/24 mx-1">
-          <span className="text-xxs italic">Activo</span>
+          <span className="text-xxs italic">{statusUser}</span>
         </div>
         <div className="h-1/12 mt-1">
           <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>
         </div>
       </div>
     </div>
+
+  
   );
 };
 
-const DetailPay = () => {
-  return (
-    <div className="flex justify-between px-4 text-xs py-1 hover:bg-gray-100">
-      <span>736</span>
-      <span>22/12/2020</span>
-      <span>Clase</span>
-      <span>$ 397.008</span>
-      <ButtonBorder
-        icon="fas fa-info-circle"
-        cssAdd="hover:border-parotia-3 hover:text-parotia-3"
-      />
-    </div>
-  );
-};
+// const DetailPay = () => {
+//   return (
+//     <div className="flex justify-between px-4 text-xs py-1 hover:bg-gray-100">
+//       <span>736</span>
+//       <span>22/12/2020</span>
+//       <span>Clase</span>
+//       <span>$ 397.008</span>
+//       <ButtonBorder
+//         icon="fas fa-info-circle"
+//         cssAdd="hover:border-parotia-3 hover:text-parotia-3"
+//       />
+//     </div>
+//   );
+// };
 
 export default IndexUser;

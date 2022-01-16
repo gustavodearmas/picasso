@@ -1,14 +1,50 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GET_USERS = gql`
   query Users {
-  Users {
-    _id
-    nameUser
-    lastName
-    statusUser
+    Users {
+      _id
+      nameUser
+      lastName
+      statusUser
+    }
   }
-}
 `;
 
-export {GET_USERS}
+const GET_USER_BY_ID = gql`
+  query User($_id: String!) {
+    User(_id: $_id) {
+      _id
+      nameUser
+      lastName
+      identification
+      email
+      movil
+      phone
+      nationality
+      birthDay
+      cityBirth
+      photo
+      emergencyContact
+      issuance
+      address
+      locality
+      strata
+      afp
+      arl
+      eps
+      rh
+      upz
+      role
+      statusUser
+      nameGuardian
+      lastNameGuardian
+      identificationGuardian
+      phoneGuardian
+      emailGuardian
+      addressGuardian
+    }
+  }
+`;
+
+export { GET_USERS, GET_USER_BY_ID };

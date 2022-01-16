@@ -10,7 +10,7 @@ const PrivateLayouth = () => {
   return (
     <div className="flex flex-row h-screen ">
 
-      {sidebarResponsive ? <SmallSidebar /> : <Sidebar_ />}
+      {sidebarResponsive ? <SmallSidebar /> : <SidebarBig />}
       <div className="bg-gray-100 flex-auto flex flex-col relative ">
         <div className="bg-parotia-3 pb-2 sticky">
           <div className="flex flex-row mt-4 items-center justify-center">
@@ -40,7 +40,7 @@ const PrivateLayouth = () => {
   );
 };
 
-const Sidebar_ = () => {
+const SidebarBig = () => {
   return (
     <div className="w-54 flex-shrink-0 hidden md:flex">
       <Sidebar />

@@ -45,11 +45,11 @@ const CREATE_USER = gql`
       address: $address
       locality: $locality
       strata: $strata
-      AFP: $afp
-      ARL: $arl
-      EPS: $eps
-      RH: $rh
-      UPZ: $upz
+      afp: $afp
+      arl: $arl
+      eps: $eps
+      rh: $rh
+      upz: $upz
       role: $role
       statusUser: $statusUser
       nameGuardian: $nameGuardian
@@ -65,4 +65,72 @@ const CREATE_USER = gql`
   }
 `;
 
-export { CREATE_USER };
+const EDIT_USER = gql`
+  mutation EditUser(
+    $_id: String!
+    $nameUser: String
+    $addressGuardian: String
+    $emailGuardian: String
+    $phoneGuardian: String
+    $identificationGuardian: String
+    $lastNameGuardian: String
+    $nameGuardian: String
+    $statusUser: Enum_StatusUsers
+    $role: Enum_Rol
+    $upz: String
+    $eps: Enum_EPS
+    $rh: Enum_RH
+    $arl: Enum_ARL
+    $afp: Enum_AFP
+    $strata: Float
+    $address: String
+    $locality: Enum_Locality
+    $cityBirth: String
+    $photo: String
+    $emergencyContact: String
+    $issuance: Enum_Issuance
+    $birthDay: Date
+    $nationality: String
+    $phone: String
+    $movil: String
+    $email: String
+    $identification: String
+    $lastName: String
+  ) {
+    editUser(
+      _id: $_id
+      nameUser: $nameUser
+      addressGuardian: $addressGuardian
+      emailGuardian: $emailGuardian
+      phoneGuardian: $phoneGuardian
+      identificationGuardian: $identificationGuardian
+      lastNameGuardian: $lastNameGuardian
+      nameGuardian: $nameGuardian
+      statusUser: $statusUser
+      role: $role
+      upz: $upz
+      eps: $eps
+      rh: $rh
+      arl: $arl
+      afp: $afp
+      strata: $strata
+      address: $address
+      locality: $locality
+      cityBirth: $cityBirth
+      photo: $photo
+      emergencyContact: $emergencyContact
+      issuance: $issuance
+      birthDay: $birthDay
+      nationality: $nationality
+      phone: $phone
+      movil: $movil
+      email: $email
+      identification: $identification
+      lastName: $lastName
+    ) {
+      nameUser
+    }
+  }
+`;
+
+export { CREATE_USER, EDIT_USER };

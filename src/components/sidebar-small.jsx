@@ -32,7 +32,7 @@ const ButtonSidebarSamll = ({ title, icon }) => {
     <>
       <a
         className="flex mb-1 border-l-4 border-parotia-1 hover:border-gray-500" //add : border-white  border-l-2
-        href="#"
+        href="/#"
       >
         <div className="flex flex-col m-auto hover:text-menta-60 text-gray-100 text-2xl">
           <i className={icon+" pt-2"}></i>

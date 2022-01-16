@@ -6,7 +6,6 @@ import IndexUser from "./pages/users/indexUser";
 import {
   ApolloProvider,
   ApolloClient,
-  createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
 
