@@ -27,7 +27,7 @@ const CREATE_USER = gql`
     $lastNameGuardian: String
     $phoneGuardian: String
     $identificationGuardian: String
-    $emailGuardian: String
+    $emailGuardian: String 
     $addressGuardian: String
   ) {
     createUser(
@@ -133,4 +133,12 @@ const EDIT_USER = gql`
   }
 `;
 
-export { CREATE_USER, EDIT_USER };
+const DISABLE_USER = gql`
+mutation DisableUser($_id: String!) {
+  disableUser(_id: $_id) {
+    nameUser
+  }
+}
+`;
+
+export { CREATE_USER, EDIT_USER, DISABLE_USER };

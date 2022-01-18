@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import Modal from "../../components/modal";
+import Modal from "../../components/modal/modal";
 import ButtomBig from "../../components/buttoms/buttomBig";
 import Input from "../../components/input";
 import DropDown from "../../components/dropDown";
@@ -23,7 +23,7 @@ const EditUser = ({ setEditUser, dataByID, refetch }) => {
     e.preventDefault();
     formData._id = dataByID.User._id;
     formData.strata = parseFloat(formData.strata)
-    console.log("formData: ", formData)
+    //console.log("formData: ", formData)
     editUser({variables: formData});
   }
 
@@ -31,7 +31,7 @@ const EditUser = ({ setEditUser, dataByID, refetch }) => {
     if(data){
       setEditUser(false);
       refetch();
-      toast.success("Usuario modificado con éxito");
+      toast.success("Usuario modificado con éxito", {position: "top-right"});
       return navigate("/admin/users");
     
     }
@@ -39,7 +39,7 @@ const EditUser = ({ setEditUser, dataByID, refetch }) => {
 
   useEffect(() => {
     if(error){
-      toast.error('Error al modificar el usuario');
+      toast.error('Error al modificar el usuario', {position: "top-right"});
     }
   }, [error]);
 
@@ -67,7 +67,7 @@ const EditUser = ({ setEditUser, dataByID, refetch }) => {
             <Input label="Dirección" type="text" name="address" defaultValue={dataByID.User.address}  />
             <Input label="UPZ" type="text" name="upz" defaultValue={dataByID.User.upz}  />
             <Input label="Estrato" type="number" name="strata" defaultValue={dataByID.User.strata}  />
-            <DropDown label="rh" name="rh" defaultValue={dataByID.User.rh}  options={Enum_RH} />
+            <DropDown label="RH" name="rh" defaultValue={dataByID.User.rh} options={Enum_RH} />
            
           </div>
           <div className="w-3/6 px-10">

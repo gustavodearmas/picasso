@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import Modal from "../../components/modal";
+import Modal from "../../components/modal/modal";
 import ButtomBig from "../../components/buttoms/buttomBig";
 import Input from "../../components/input";
 import DropDown from "../../components/dropDown";
@@ -31,14 +31,14 @@ const CreateUser = ({ setCreateUser, refetch }) => {
     if(mutationData){
       setCreateUser(false);
       refetch();
-      toast.success('Usuario creado correctamente');
+      toast.success('Usuario creado correctamente', {position: "top-right"});
       return navigate("/admin/users");
     }
   }, [mutationData]);
 
   useEffect(() => {
     if(mutationError){
-      toast.error('Error al intentat guardar el usuario');
+      toast.error('Error al intentat guardar el usuario', {position: "top-right"});
     }
   }, [mutationError]);
 
@@ -66,7 +66,7 @@ const CreateUser = ({ setCreateUser, refetch }) => {
             <Input label="Dirección" type="text" name="address"  />
             <Input label="UPZ" type="text" name="upz"  />
             <Input label="Estrato" type="number" name="strata"  />
-            <DropDown label="rh" name="rh"  options={Enum_RH} />
+            <DropDown label="RH" name="rh"  options={Enum_RH} />
            
           </div>
           <div className="w-3/6 px-10">

@@ -10,42 +10,90 @@ import CreateUser from "./createUser";
 import EditUser from "./editUser";
 import ButtomBig from "../../components/buttoms/buttomBig";
 import { GET_USERS, GET_USER_BY_ID } from "../../graphql/user/querys";
-import toast from 'react-hot-toast';
-import { useQuery } from "@apollo/client";
+import { DISABLE_USER } from "../../graphql/user/mutations";
+import toast from "react-hot-toast";
+import { useQuery, useMutation } from "@apollo/client";
+import { calculateAge } from "../../utils/generalFunctions";
+import DisableRecord from "../../components/toast/disable";
+import ImportData from "./importData";
 
 const IndexUser = () => {
   const [createUser, setCreateUser] = useState(false);
   const [editUser, setEditUser] = useState(false);
-  const { data, error, loading } = useQuery(GET_USERS);
+  const { data, error, loading, refetch: refetchUsers } = useQuery(GET_USERS);
   const [_id, setID] = useState("");
   const {
     data: dataByID,
-    errorByID,
-    loadingByID,
-    refetch
+    error: errorByID,
+    loading: loadingByID,
+    refetch,
   } = useQuery(GET_USER_BY_ID, { variables: { _id } });
+  const [
+    disableUser,
+    {
+      data: dataDisableUser,
+      loading: loadingDisableUser,
+      error: errorDisableUser,
+    },
+  ] = useMutation(DISABLE_USER);
 
-  console.log("data: ", data)
-  console.log("_id: ", _id)
-  console.log("dataByID: ", dataByID)
+  useEffect(() => {
+    if (dataDisableUser) {
+      toast.success("Usuario desactivado", { position: "top-right" });
+      refetchUsers();
+    }
+  }, [dataDisableUser]);
 
   useEffect(() => {
     if (error) {
-      toast.error('Error consultando los usuarios');
+      toast.error("Error consultando los usuarios", { position: "top-right" });
     }
     if (errorByID) {
-      toast.error('Error consultando el usuario');
+      toast.error("Error consultando el usuario", { position: "top-right" });
     }
-  }, [error, errorByID]);
+    if (errorDisableUser) {
+      toast.error("Error al intentar desactivar este usuario", {
+        position: "top-right",
+      });
+    }
+  }, [error, errorByID, errorDisableUser]);
 
-  if(loading || loadingByID){return <div>Loding...</div>}
+  const disableUser_ = (data) => {
+    toast(
+      () => (
+        <DisableRecord
+          title={`${dataByID.User.nameUser} ${dataByID.User.lastName}`}
+          message="¿Estás seguro que quieres eliminar este usuario?"
+          onClick={() => {
+            disableUser({ variables: data });
+          }}
+        />
+      ),
+      { position: "top-right" }
+    );
+  };
+
+  if (loading || loadingByID) {
+    return <div>Loding...</div>;
+  }
 
   return (
     <>
-    
-      {editUser ? <EditUser setEditUser={setEditUser} dataByID={dataByID} refetch={refetch} /> : <></>}
-      {createUser ? <CreateUser setCreateUser={setCreateUser} refetch={refetch} /> : <></>}
-      
+      {editUser ? (
+        <EditUser
+          setEditUser={setEditUser}
+          dataByID={dataByID}
+          refetch={refetchUsers}
+        />
+      ) : (
+        <></>
+      )}
+      {createUser ? (
+        <CreateUser setCreateUser={setCreateUser} refetch={refetchUsers} />
+      ) : (
+        <></>
+      )}
+
       {/* Header */}
       <div className="flex flex-row justify-end">
         <div className="flex items-center w-auto text-sm ">
@@ -55,8 +103,14 @@ const IndexUser = () => {
             placeholder="Buscar..."
           />
 
-          <ButtomBig text="Nuevo" onclick={()=>{setCreateUser(true)}} />
-          <ButtomBig text="Importar" bg="bg-gray-700" />
+          <ButtomBig
+            text="Nuevo"
+            onclick={() => {
+              setCreateUser(true);
+            }}
+          />
+          <ImportData/>
+
         </div>
       </div>
       {/* Header */}
@@ -96,9 +150,20 @@ const IndexUser = () => {
 
           {/* Componentes de Usuarios */}
           <div className="h-19/24 flex flex-col divide-y divide-gray-200 overflow-auto -mt-3">
-            {data && data.Users.map((e, pos)=>{
-              return <ItemsUser k={pos} _idUser={e._id} nameUser={e.nameUser} lastName={e.lastName} statusUser={e.statusUser} setID={setID} photo={e.photo} />
-            })}
+            {data &&
+              data.Users.map((e, pos) => {
+                return (
+                  <ItemsUser
+                    k={pos}
+                    _idUser={e._id}
+                    nameUser={e.nameUser}
+                    lastName={e.lastName}
+                    statusUser={e.statusUser}
+                    setID={setID}
+                    photo={e.photo}
+                  />
+                );
+              })}
           </div>
           {/* Componentes de Usuarios */}
         </div>
@@ -138,6 +203,9 @@ const IndexUser = () => {
             <ButtonBorder
               icon="far fa-trash-alt"
               cssAdd="hover:border-red-400 hover:text-red-400"
+              onclick={() => {
+                disableUser_({ _id: _id });
+              }}
             />
           </div>
           <Line />
@@ -160,7 +228,7 @@ const IndexUser = () => {
               key_="Ciudad de Nacimiento"
               value_={dataByID && dataByID.User.cityBirth}
             />
-               <IconKeyValue
+            <IconKeyValue
               icon="fas fa-id-badge"
               key_="Nacionalidad"
               value_={dataByID && dataByID.User.nationality}
@@ -169,10 +237,20 @@ const IndexUser = () => {
               icon="fas fa-birthday-cake"
               key_="Fecha de Nacimiento"
               value_={dataByID && dataByID.User.birthDay.slice(0, 10)}
-              value_2="edad"
+              value_2={
+                dataByID && calculateAge(dataByID.User.birthDay.slice(0, 10))
+              }
             />
-            <IconKeyValue icon="fas fa-syringe" key_="rh" value_="O-" />
-          
+            <IconKeyValue
+              icon="fas fa-syringe"
+              key_="RH"
+              value_={
+                dataByID &&
+                dataByID.User.rh &&
+                dataByID.User.rh.replace("_", " ")
+              }
+            />
+
             <IconKeyValue
               icon="fas fa-envelope"
               key_="Email"
@@ -184,78 +262,96 @@ const IndexUser = () => {
               value_="3286212"
               value_2={dataByID && dataByID.User.phone}
             />
-              <IconKeyValue
+            <IconKeyValue
               icon="fas fa-medkit"
-              key_="eps"
-              value_={dataByID && dataByID.User.eps}
+              key_="EPS"
+              value_={
+                dataByID &&
+                dataByID.User.eps &&
+                dataByID.User.eps.replace("_", " ")
+              }
             />
-              <IconKeyValue
+            <IconKeyValue
               icon="fas fa-hand-holding-usd"
-              key_="arl"
-              value_={dataByID && dataByID.User.arl}
+              key_="ARL"
+              value_={
+                dataByID &&
+                dataByID.User.arl &&
+                dataByID.User.arl.replace("_", " ")
+              }
             />
-              <IconKeyValue
+            <IconKeyValue
               icon="fas fa-blind"
-              key_="afp"
-              value_={dataByID && dataByID.User.afp}
+              key_="AFP"
+              value_={
+                dataByID &&
+                dataByID.User.afp &&
+                dataByID.User.afp.replace("_", " ")
+              }
             />
-              <IconKeyValue
+            <IconKeyValue
               icon="fas fa-map-marker-alt"
               key_="Dirección"
               value_={dataByID && dataByID.User.address}
             />
-               <IconKeyValue
+            <IconKeyValue
               icon="fas fa-arrow-alt-circle-up"
               key_="Estrato"
               value_={dataByID && dataByID.User.strata}
             />
-               <IconKeyValueX2
+            <IconKeyValueX2
               icon="fas fa-map-marked-alt"
-              key_="upz/Localidad"
+              key_="UPZ/Localidad"
               value_={dataByID && dataByID.User.upz}
-              value_2={dataByID && dataByID.User.locality}
+              value_2={
+                dataByID &&
+                dataByID.User.locality &&
+                dataByID.User.locality.replace("_", " ")
+              }
             />
-                <IconKeyValue
+            <IconKeyValue
               icon="fas fa-arrow-alt-circle-up"
               key_="Contato de Emergencia"
               value_={dataByID && dataByID.User.emergencyContact}
             />
           </div>
           <Line />
-          <h6 className="text-xs font-bold mt-4 mb-8">Acudiente</h6>
-          <IconKeyValue2x1
-            icon="fas fa-user"
-            key_="Nombre"
-            value_={dataByID && dataByID.User.nameGuardian}
-            value_2={dataByID && dataByID.User.lastNameGuardian}
-            value_3=""
-          />
-          <IconKeyValue
-            icon="fas fa-id-badge"
-            key_="Identificación"
-            value_={dataByID && dataByID.User.identificationGuardian}
-          />
-          <IconKeyValue
-            icon="fas fa-users"
-            key_="Parentesco"
-            value_={dataByID && dataByID.User.issuance}
-          />
-         
-          <IconKeyValue
-            icon="fas fa-map-marker-alt"
-            key_="Dirección"
-            value_={dataByID && dataByID.User.addressGuardian}
-          />
-          <IconKeyValue
-            icon="fas fa-envelope"
-            key_="Email"
-            value_={dataByID && dataByID.User.emailGuardian}
-          />
-          <IconKeyValue
-            icon="fas fa-phone-alt"
-            key_="Teléfono"
-            value_={dataByID && dataByID.User.phoneGuardian}
-          />
+          <h6 className="text-xs font-bold mt-4 mb-4">Acudiente</h6>
+          <div className="px-2 pt-4">
+            <IconKeyValue2x1
+              icon="fas fa-user"
+              key_="Nombre"
+              value_={dataByID && dataByID.User.nameGuardian}
+              value_2={dataByID && dataByID.User.lastNameGuardian}
+              value_3=""
+            />
+            <IconKeyValue
+              icon="fas fa-id-badge"
+              key_="Identificación"
+              value_={dataByID && dataByID.User.identificationGuardian}
+            />
+            <IconKeyValue
+              icon="fas fa-users"
+              key_="Parentesco"
+              value_={dataByID && dataByID.User.issuance}
+            />
+
+            <IconKeyValue
+              icon="fas fa-map-marker-alt"
+              key_="Dirección"
+              value_={dataByID && dataByID.User.addressGuardian}
+            />
+            <IconKeyValue
+              icon="fas fa-envelope"
+              key_="Email"
+              value_={dataByID && dataByID.User.emailGuardian}
+            />
+            <IconKeyValue
+              icon="fas fa-phone-alt"
+              key_="Teléfono"
+              value_={dataByID && dataByID.User.phoneGuardian}
+            />
+          </div>
         </div>
         {/* Card_2 - Información de Usuario*/}
 
@@ -295,37 +391,50 @@ const IndexUser = () => {
   );
 };
 
-const ItemsUser = ({k, _idUser, nameUser, lastName, statusUser, photo, setID}) => {
+const ItemsUser = ({
+  k,
+  _idUser,
+  nameUser,
+  lastName,
+  statusUser,
+  photo,
+  setID,
+}) => {
   return (
-
-    <div className="bg-gray-50 hover:bg-gray-100" onClick={()=>{setID(_idUser)}} key={k} > 
-      <div  className="flex flex-row h-12 items-center px-4">
+    <div
+      className="bg-gray-50 hover:bg-gray-100"
+    >
+      <div className="flex flex-row h-12 items-center px-4">
         <div className="w-1/24 mr-2">
           <input className="h-3 w-3 rounded-full" type="checkbox" />
         </div>
-
-        <div className=" w-3/24" src="" alt="" >
-          <div className="flex mx-auto rounded-full bg-gray-200 border-1 border-gray-100 justify-center w-8 h-8">
-            <img
-              className="object-cover object-center w-5 h-5 mt-1"
-              src={AvatarImage}
-              alt=""
-            />
+        <div className="flex flex-row h-12 w-23/24 items-center px-4" onClick={() => {
+        setID(_idUser);
+      }}
+      key={k}>
+          <div className="w-3/24" src="" alt="">
+            <div className="flex mx-auto rounded-full bg-gray-200 border-1 border-gray-100 justify-center w-8 h-8">
+              <img
+                className="object-cover object-center w-5 h-5 mt-1"
+                src={AvatarImage}
+                alt=""
+              />
+            </div>
           </div>
-        </div>
-        <div className="w-17/24 mx-1">
-          <span className="text-xs">{nameUser}{" "}{lastName}</span>
-        </div>
-        <div className="w-3/24 mx-1">
-          <span className="text-xxs italic">{statusUser}</span>
-        </div>
-        <div className="h-1/12 mt-1">
-          <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>
+          <div className="w-17/24 mx-1">
+            <span className="text-xs">
+              {nameUser} {lastName}
+            </span>
+          </div>
+          <div className="w-3/24 mx-1">
+            <span className="text-xxs italic">{statusUser}</span>
+          </div>
+          <div className="h-1/24">
+            <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>
+          </div>
         </div>
       </div>
     </div>
-
-  
   );
 };
 
