@@ -7,7 +7,7 @@ const Enum_Role = {
 
 const Enum_StatusUsers = {
     ACTIVO : 'ACTIVO',
-    ANACTIVO : 'ANACTIVO'
+    INACTIVO : 'INACTIVO'
 }
 
 const Enum_AFP = {

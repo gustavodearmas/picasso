@@ -16,11 +16,14 @@ import { useQuery, useMutation } from "@apollo/client";
 import { calculateAge } from "../../utils/generalFunctions";
 import DisableRecord from "../../components/toast/disable";
 import ImportData from "./importData";
+import { Enum_StatusUsers } from "../../utils/enums";
 
 const IndexUser = () => {
+  const [statusFilter, setStatusFilter] = useState("TODOS");
   const [createUser, setCreateUser] = useState(false);
   const [editUser, setEditUser] = useState(false);
   const { data, error, loading, refetch: refetchUsers } = useQuery(GET_USERS);
+  const [listUser, setListUSer] = useState(data);
   const [_id, setID] = useState("");
   const {
     data: dataByID,
@@ -38,6 +41,30 @@ const IndexUser = () => {
   ] = useMutation(DISABLE_USER);
 
   useEffect(() => {
+    if(data && statusFilter==="TODOS"){
+      setListUSer(data.Users);
+    }else{
+      if(data){setListUSer(data.Users.filter(d=> d.statusUser+"S" === statusFilter))}
+    }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    if (listUser) {
+      setID(listUser[0]._id);
+    }
+  }, [listUser]);
+
+  useEffect(() => {
+    if (data) {
+      setListUSer(data.Users);
+    }
+  }, [data]);
+
+    // console.log("list: ", listUser)
+    console.log("id: ", _id)
+
+  
+  useEffect(() => {
     if (dataDisableUser) {
       toast.success("Usuario desactivado", { position: "top-right" });
       refetchUsers();
@@ -48,9 +75,9 @@ const IndexUser = () => {
     if (error) {
       toast.error("Error consultando los usuarios", { position: "top-right" });
     }
-    if (errorByID) {
-      toast.error("Error consultando el usuario", { position: "top-right" });
-    }
+    // if (errorByID) {
+    //   toast.error("Error consultando el usuario", { position: "top-right" });
+    // }
     if (errorDisableUser) {
       toast.error("Error al intentar desactivar este usuario", {
         position: "top-right",
@@ -69,7 +96,7 @@ const IndexUser = () => {
           }}
         />
       ),
-      { position: "top-right" }
+      { position: "top-right", duration: 2000 }
     );
   };
 
@@ -95,22 +122,22 @@ const IndexUser = () => {
       )}
 
       {/* Header */}
-      <div className="flex flex-row justify-end">
-        <div className="flex items-center w-auto text-sm ">
+      <div className="flex justify-center md:justify-end w-full">
+        <div className="flex flex-col-reverse md:flex-row items-center w-auto text-sm ">
           <input
             className="py-2 rounded w-80 text-xs pl-8 border-1 border-gray-200 shadow-md outline-none"
             type="text"
             placeholder="Buscar..."
           />
-
-          <ButtomBig
-            text="Nuevo"
-            onclick={() => {
-              setCreateUser(true);
-            }}
-          />
-          <ImportData/>
-
+          <div className="flex justify-end mb-2 md:mb-0 w-full md:w-auto">
+            <ButtomBig
+              text="Nuevo"
+              onclick={() => {
+                setCreateUser(true);
+              }}
+            />
+            <ImportData />
+          </div>
         </div>
       </div>
       {/* Header */}
@@ -118,54 +145,68 @@ const IndexUser = () => {
       {/* Content */}
       <div className="h-full flex flex-col lg:flex-row mt-4">
         {/* Card_1 - Lista de usuarios */}
-        <div className="h-full shadow-md rounded flex-1 mr-1 bg-gray-50">
-          {/* Cabecera y query de total de registros */}
-          <div className="h-3/24 text-xs font-bold divide-y divide-gray-200 pt-8">
-            <div className="flex flex-wrap w-full content-end justify-between px-4">
-              <span>Usuarios</span>
-              <span>36 usuarios</span>
-            </div>
-            <div className="mt-4"></div>
-          </div>
-          {/* Cabecera y query de total de registros */}
-
-          {/* Seleccionar todo y botón de borrar */}
-          <div className="h-2/24 divide-y divide-gray-200 ">
-            <div className="flex flex-row justify-between items-center px-4 pb-2">
-              <div className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span className="text-xxs italic">Seleccionar todo</span>
+        <div className="md:flex hidden flex-1">
+          <div className="h-full w-full shadow-md rounded mr-1 bg-gray-50">
+            {/* Cabecera y query de total de registros */}
+            <div className="h-3/24 text-xs font-bold divide-y divide-gray-200 pt-8">
+              <div className="flex flex-wrap w-full content-end justify-between px-4">
+                <div>
+                  <label htmlFor="" className="mr-1">Filtro:</label>
+                  <select className="focus:outline-none bg-gray-50" name="drop" defaultValue={statusFilter} onChange={(e)=>{
+                    setStatusFilter(e.target.value)
+                  }}>
+                    <option>ACTIVOS</option>
+                    <option>INACTIVOS</option>
+                    <option>TODOS</option>
+                  </select>
+                </div>
+                <div>
+                  {listUser && data ? <span className="pr-2">{`${listUser.length}/${data.Users.length} Usuarios`}</span> : <></>}
+                  
+                </div>
               </div>
-              <div className="">
-                <ButtonBorder
-                  text="Borrar"
-                  icon="far fa-trash-alt pr-2"
-                  cssAdd="mr-1 hover:border-red-400 hover:text-red-400"
-                />
-              </div>
+              <div className="mt-4"></div>
             </div>
-            <div></div>
-          </div>
-          {/* Seleccionar todo y botón de borrar */}
+            {/* Cabecera y query de total de registros */}
 
-          {/* Componentes de Usuarios */}
-          <div className="h-19/24 flex flex-col divide-y divide-gray-200 overflow-auto -mt-3">
-            {data &&
-              data.Users.map((e, pos) => {
-                return (
-                  <ItemsUser
-                    k={pos}
-                    _idUser={e._id}
-                    nameUser={e.nameUser}
-                    lastName={e.lastName}
-                    statusUser={e.statusUser}
-                    setID={setID}
-                    photo={e.photo}
+            {/* Seleccionar todo y botón de borrar */}
+            <div className="h-2/24 divide-y divide-gray-200 ">
+              <div className="flex flex-row justify-between items-center px-4 pb-2">
+                <div className="flex items-center">
+                  <input type="checkbox" className="mr-2" />
+                  <span className="text-xxs italic">Seleccionar todo</span>
+                </div>
+                <div className="">
+                  <ButtonBorder
+                    text="Borrar"
+                    icon="far fa-trash-alt pr-2"
+                    cssAdd="mr-1 hover:border-red-400 hover:text-red-400"
                   />
-                );
-              })}
+                </div>
+              </div>
+              <div></div>
+            </div>
+            {/* Seleccionar todo y botón de borrar */}
+
+            {/* Componentes de Usuarios */}
+            <div className="h-19/24 flex flex-col divide-y divide-gray-200 overflow-auto -mt-3">
+              {listUser &&
+                listUser.map((e, pos) => {
+                  return (
+                    <ItemsUser
+                      k={pos}
+                      _idUser={e._id}
+                      nameUser={e.nameUser}
+                      lastName={e.lastName}
+                      statusUser={e.statusUser}
+                      setID={setID}
+                      photo={e.photo}
+                    />
+                  );
+                })}
+            </div>
+            {/* Componentes de Usuarios */}
           </div>
-          {/* Componentes de Usuarios */}
         </div>
         {/* Card_1 - Lista de usuarios */}
 
@@ -401,17 +442,18 @@ const ItemsUser = ({
   setID,
 }) => {
   return (
-    <div
-      className="bg-gray-50 hover:bg-gray-100"
-    >
+    <div className="bg-gray-50 hover:bg-gray-100">
       <div className="flex flex-row h-12 items-center px-4">
         <div className="w-1/24 mr-2">
           <input className="h-3 w-3 rounded-full" type="checkbox" />
         </div>
-        <div className="flex flex-row h-12 w-23/24 items-center px-4" onClick={() => {
-        setID(_idUser);
-      }}
-      key={k}>
+        <div
+          className="flex flex-row h-12 w-23/24 items-center px-4"
+          onClick={() => {
+            setID(_idUser);
+          }}
+          key={k}
+        >
           <div className="w-3/24" src="" alt="">
             <div className="flex mx-auto rounded-full bg-gray-200 border-1 border-gray-100 justify-center w-8 h-8">
               <img
@@ -430,7 +472,11 @@ const ItemsUser = ({
             <span className="text-xxs italic">{statusUser}</span>
           </div>
           <div className="h-1/24">
-            <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>
+            {statusUser === Enum_StatusUsers.ACTIVO ? (
+              <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>
+            ) : (
+              <div className="h-2 w-2 rounded-full border-2 border-red-400"></div>
+            )}
           </div>
         </div>
       </div>

@@ -51,18 +51,18 @@ const CreateUser = ({ setCreateUser, refetch }) => {
       <form onSubmit={submitForm} onChange={updateFormData} ref={form}>
         <div className="flex">
           <div className="w-3/6 px-10">
-            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} />
-            <DropDown label="Rol" type="text" name="role"  options={Enum_Role} />
-            <Input label="Nombres" type="text" name="nameUser"  />
-            <Input label="Apellidos" type="text" name="lastName"  />
-            <Input label="Identificación" type="text" name="identification"  />
+            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} required />
+            <DropDown label="Rol" type="text" name="role"  options={Enum_Role} required />
+            <Input label="Nombres" type="text" name="nameUser" required />
+            <Input label="Apellidos" type="text" name="lastName" required />
+            <Input label="Identificación" type="text" name="identification" required />
             <Input label="Ciudad de Nacimiento" type="text" name="cityBirth"  />
             <Input label="Nacionalidad" type="text" name="nationality"  />
-            <Input label="Fecha Nacimiento" type="text" name="birthDay"  />
+            <Input label="Fecha Nacimiento" type="text" name="birthDay" required />
             <Input label="Foto (url)" type="text" name="photo"  />
-            <Input label="Email" type="text" name="email"  />
+            <Input label="Email" type="email" name="email" required />
             <Input label="Teléfono" type="text" name="phone"  />
-            <Input label="Celular" type="text" name="movil"  />
+            <Input label="Celular" type="text" name="movil" required />
             <Input label="Dirección" type="text" name="address"  />
             <Input label="UPZ" type="text" name="upz"  />
             <Input label="Estrato" type="number" name="strata"  />
