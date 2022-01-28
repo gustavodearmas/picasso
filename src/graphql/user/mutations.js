@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 
-
 const CREATE_USER = gql`
   mutation CreateUser(
     $nameUser: String!
@@ -28,7 +27,7 @@ const CREATE_USER = gql`
     $lastNameGuardian: String
     $phoneGuardian: String
     $identificationGuardian: String
-    $emailGuardian: String 
+    $emailGuardian: String
     $addressGuardian: String
   ) {
     createUser(
@@ -135,11 +134,20 @@ const EDIT_USER = gql`
 `;
 
 const DISABLE_USER = gql`
-mutation DisableUser($_id: String!) {
-  disableUser(_id: $_id) {
-    nameUser
+  mutation DisableUser($_id: String!) {
+    disableUser(_id: $_id) {
+      nameUser
+    }
   }
-}
 `;
 
-export { CREATE_USER, EDIT_USER, DISABLE_USER };
+const SEND_MAIL = gql`
+  mutation SendMail($to: String!, $subject: String!, $message: String!) {
+    sendMail(to: $to, subject: $subject, message: $message) {
+      to
+      message
+    }
+  }
+`;
+
+export { CREATE_USER, EDIT_USER, DISABLE_USER, SEND_MAIL };

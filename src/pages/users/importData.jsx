@@ -1,67 +1,34 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import * as XLSX from "xlsx";
 import ButtomBig from "../../components/buttoms/buttomBig";
 import ModalSmall from "../../components/modal/modalSmall";
 import { CREATE_USER } from "../../graphql/user/mutations";
 import toast from "react-hot-toast";
+import useImportData from "../../hook/user/useImportData";
 
 const ImportData = () => {
-  const [file, setFile] = useState("");
-  const [items, setItems] = useState([]);
+  const [file, setFile] = useState(null);
+  const [run, setRun] = useState(false);
   const [viewModal, setViewModal] = useState(false);
   const [createUser, { data, loading, error }] = useMutation(CREATE_USER);
-  const readExcel = (file) => {
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-      fileReader.onload = (e) => {
-        const bufferArray = e.target.result;
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-        resolve(data);
-      };
-      
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-    
-    
-    promise.then((d) => {
-      d.map((u) => {
-        createUser({ variables: u }).then((a)=>{
-          console.log("a: ", a)
-        }).catch((e)=>{
-          if(e["message"].includes("duplicate")){
-            toast.error(`Campos duplicados: ${e["message"].slice(80,).replace("}", " ")}`, {position: "top-right",})
-          }
-          toast.error(`Se produjo el sigueinte error: ${e.networkError.result.errors[0].message}`, {position: "top-right",} )
-          
-          
-        });
-      });
-     
-      //setItems(d);
-    });
-  };
-  useEffect(() => {
-    if (error) {
-      toast.error(`Ha ocurrido un error inesperado`, {
-        position: "top-right",
-      });
-    }
-  }, [error]);
+  useImportData(file, createUser, run);
 
   useEffect(() => {
     if (data) {
-      toast.success("importación realizada con éxito usuario", {
+      toast.success("Importación realizada con éxito usuario", {
         position: "top-right",
       });
+      setRun(false);
+      setFile(null);
     }
-  }, [data]);
+  }, [data, file, setFile]);
+
+  useEffect(() => {
+    if (error) {
+      setRun(false);
+      setFile(null);
+    }
+  }, [error]);
 
   if (loading) {
     return <div>Loding...</div>;
@@ -101,7 +68,9 @@ const ImportData = () => {
                       <span> Subir</span>
                     </div>
                     <div className="border border-gray-300 rounded-r-md flex items-center justify-between">
-                      <span className="px-4 w-full">{file["name"]}</span>
+                      <span className="px-4 w-full">
+                        {file && file["name"]}
+                      </span>
                     </div>
                   </div>
                   <input
@@ -118,29 +87,27 @@ const ImportData = () => {
               * Extensión del archivo .xlsx
             </span>
             <div className="flex justify-center">
-            {file !== "" ? (
-              
+              {file !== null ? (
                 <ButtomBig
                   text="Importar"
                   cssadd="mt-4 w-full"
                   onclick={() => {
-                    readExcel(file);
+                    setRun(true);
                     setViewModal(false);
                   }}
                 />
-             
-            ) : (
-              <></>
-            )}
-               <ButtomBig
-                  text="Cancelar"
-                  cssadd="mt-4 w-full"
-                  onclick={() => {
-                    setFile("")
-                    setViewModal(false);
-                  }}
-                />
-             </div>
+              ) : (
+                <></>
+              )}
+              <ButtomBig
+                text="Cancelar"
+                cssadd="mt-4 w-full"
+                onclick={() => {
+                  setFile(null);
+                  setViewModal(false);
+                }}
+              />
+            </div>
           </div>
         </ModalSmall>
       ) : (

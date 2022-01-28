@@ -1,29 +1,32 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import Modal from "../../components/modal/modal";
 import ButtomBig from "../../components/buttoms/buttomBig";
-import Input from "../../components/input";
+import Input from "../../components/Input";
 import DropDown from "../../components/dropDown";
-import useFormData from "../../hook/userFormData";
+import useFormData from "../../hook/user/useFormData";
 import Line from "../../components/Line";
 import { EDIT_USER } from "../../graphql/user/mutations";
 import { useMutation } from "@apollo/client";
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 import {Enum_Role, Enum_AFP, Enum_ARL, Enum_EPS, Enum_Issuance, Enum_Locality, Enum_RH, Enum_StatusUsers} from '../../utils/enums'
+import UserContext from "../../context/UserContext";
 
 
-const EditUser = ({ setEditUser, dataByID, refetch }) => {
+const EditUser = () => {
   const { form, formData, updateFormData } = useFormData(null);
   const navigate = useNavigate();
+  const {setEditUser, dataByID, refetch} = useContext(UserContext);
+  
   const [
     editUser,
     { data, loading, error},
   ] = useMutation(EDIT_USER);
+
   const submitForm = (e) => {
     e.preventDefault();
     formData._id = dataByID.User._id;
     formData.strata = parseFloat(formData.strata)
-    //console.log("formData: ", formData)
     editUser({variables: formData});
   }
 
@@ -41,7 +44,7 @@ const EditUser = ({ setEditUser, dataByID, refetch }) => {
     if(error){
       toast.error('Error al modificar el usuario', {position: "top-right"});
     }
-  }, [error]);
+  }, [error, navigate, refetch, setEditUser]);
 
   if(loading){return <div>Loding...</div>}
 

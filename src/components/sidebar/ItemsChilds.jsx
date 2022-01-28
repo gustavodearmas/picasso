@@ -36,11 +36,7 @@ const ItemsChilds = ({icon, title, link}) => {
       </div>
       <div className="pt-2 pl-4">
         <ul className="flex flex-col pl-2 text-gray-500 border-l border-gray-700">
-         <Children title="titulo 1" link="#"/>
-         <Children title="titulo 1" link="#"/>
-         <Children title="titulo 1" link="#"/>
-         <Children title="titulo 1" link="#"/>
-         <Children title="titulo 1" link="#"/>
+         <Children title="Reportes" link="#"/>
          </ul>
       </div>
     </li>

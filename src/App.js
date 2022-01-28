@@ -1,13 +1,15 @@
 import "./styles/main.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
 import PrivateLayouth from "./layouts/PrivateLoyouts";
-import IndexUser from "./pages/users/indexUser";
+import Index from "./pages/users/Index";
 import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
 } from "@apollo/client";
+import SendMail from "./components/SendMail";
+import UsersExportPDF from "./pages/users/reports/UsersExportPDF";
+import IndexR from "./pages/users/reports/IndexR";
 
 // const httpLink = createHttpLink({
 //   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -26,9 +28,10 @@ function App() {
     <ApolloProvider client={client}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
           <Route path="/admin" element={<PrivateLayouth />}>
-            <Route path="users/" element={<IndexUser />} />
+            <Route path="users/" element={<Index />} />
+            <Route path="users/sendmail" element={<SendMail />} />
+            <Route path="users/export" element={<IndexR />} />
           </Route>
         </Routes>
       </BrowserRouter>
