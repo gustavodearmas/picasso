@@ -3,6 +3,7 @@ import SelectAllDelete from "./SelectAllDelete";
 import AvatarImage from "../../images/no-avatar.png";
 import { Enum_StatusUsers } from "../../utils/enums";
 import UserContext from "../../context/UserContext";
+import Line from "../../components/Line";
 
 const CardDataList = () => {
   const {
@@ -18,6 +19,7 @@ const CardDataList = () => {
     listUserToPDF,
     setListUserToPDF,
   } = useContext(UserContext);
+
 
   useEffect(() => {
     setById(false);

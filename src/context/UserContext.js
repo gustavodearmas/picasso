@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/client";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
+  const [preViewPDF, setPreViewPDF] = useState(false);
   const [statusFilter, setStatusFilter] = useState("TODOS");
   const [createUser, setCreateUser] = useState(null);
   const [editUser, setEditUser] = useState(false);
@@ -62,7 +63,9 @@ const UserProvider = ({ children }) => {
         search,
         setSearch,
         listUserToPDF, 
-        setListUserToPDF
+        setListUserToPDF, 
+        preViewPDF, 
+        setPreViewPDF
       }}
     >
       {children}

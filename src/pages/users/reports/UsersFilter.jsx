@@ -1,17 +1,24 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CardDataList from "../CardDataList";
 import UserContext from "../../../context/UserContext";
 import HeaderContent from "../HeaderContent";
 import AvatarImage from "../../../images/no-avatar.png";
-import ButtomBig from "../../../components/buttoms/buttomBig";
 import Line from "../../../components/Line";
 import ButtonBorder from "../../../components/buttoms/buttonBorder";
+import ExportDataPDF from "./ExportDataPDF";
 
 const UsersExportPDF = () => {
-  const { setById, data, setListUserFiltered, search, listUserToPDF } =
-    useContext(UserContext);
-
-  console.log("lf", listUserToPDF.length);
+  const {
+    setById,
+    data,
+    setListUserFiltered,
+    search,
+    listUserToPDF,
+    preViewPDF,
+    setPreViewPDF,
+    dataByID,
+  } = useContext(UserContext);
+  const [valueKey, setValueKey] = useState([]);
 
   useEffect(() => {
     if (data) {
@@ -29,6 +36,12 @@ const UsersExportPDF = () => {
     setById(true);
   }, []);
 
+  useEffect(() => {
+    if (dataByID) {
+      setValueKey([Object.keys(dataByID.User)]);
+    }
+  }, [dataByID]);
+
   return (
     <>
       <HeaderContent />
@@ -40,10 +53,12 @@ const UsersExportPDF = () => {
         <div className="flex flex-col md:flex-1 bg-gray-50 px-4 py-7 shadow-md text-xs">
           <div className="flex justify-between items-center -mb-2">
             <h5 className="font-bold ">Listado para exportar</h5>
-            <ButtonBorder text="Visualizar" />
+            <ButtonBorder
+              text="Visualizar"
+              onclick={() => setPreViewPDF(true)}
+            />
           </div>
           <Line />
-
           <div className="flex flex-wrap justify-center content-center h-full">
             {listUserToPDF.length !== 0
               ? listUserToPDF.map((item) => {
@@ -56,7 +71,6 @@ const UsersExportPDF = () => {
                           alt=""
                         />
                       </div>
-
                       <span className="text-xs">
                         {item.nameUser} {item.lastName}
                       </span>
@@ -65,9 +79,34 @@ const UsersExportPDF = () => {
                 })
               : "Seleccione los usuarios a impirmir"}
           </div>
+          <Line />
+          <span className="py-2">Filtros: </span>
+          <div className="flex flex-wrap justify-left h-20 overflow-auto">
+            {valueKey[0] &&
+              valueKey[0].slice(2).map((o) => {
+                return <ItemsCheck o={o} />;
+              })}
+          </div>
         </div>
       </div>
+      {preViewPDF ? (
+        <ExportDataPDF setPreViewPDF={setPreViewPDF} data={listUserToPDF} />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
+
+const ItemsCheck = ({ o }) => {
+  return (
+    <div className="flex items-center mr-2">
+      <label htmlFor="" className="mr-1">
+        {o}
+      </label>
+      <input type="checkbox" name="nameUser" />
+    </div>
+  );
+};
+
 export default UsersExportPDF;

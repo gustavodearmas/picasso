@@ -1,11 +1,11 @@
 import React from "react";
 import { UserProvider } from "../../../context/UserContext";
-import UsersExportPDF from "./UsersExportPDF";
+import UsersFilter from "./UsersFilter";
 
 const IndexR = () => {
   return (
     <UserProvider >
-      <UsersExportPDF/>
+      <UsersFilter/>
     </UserProvider>
   );
 };

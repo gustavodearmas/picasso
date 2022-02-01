@@ -8,8 +8,8 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import SendMail from "./components/SendMail";
-import UsersExportPDF from "./pages/users/reports/UsersExportPDF";
 import IndexR from "./pages/users/reports/IndexR";
+import Borrar from "./pages/users/Borrar";
 
 // const httpLink = createHttpLink({
 //   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -31,7 +31,8 @@ function App() {
           <Route path="/admin" element={<PrivateLayouth />}>
             <Route path="users/" element={<Index />} />
             <Route path="users/sendmail" element={<SendMail />} />
-            <Route path="users/export" element={<IndexR />} />
+            <Route path="users/borrar" element={<Borrar/>} />
+            <Route path="users/filter-data" element={<IndexR />} />
           </Route>
         </Routes>
       </BrowserRouter>
