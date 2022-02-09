@@ -47,4 +47,40 @@ const GET_USER_BY_ID = gql`
   }
 `;
 
-export { GET_USERS, GET_USER_BY_ID };
+const GET_USERS_BY_ID = gql`
+query UsersById($_id: [String]!) {
+  UsersById(_id: $_id) {
+    _id
+    nameUser
+    lastName
+    identification
+    email
+    movil
+    phone
+    nationality
+    birthDay
+    cityBirth
+    photo
+    emergencyContact
+    issuance
+    address
+    locality
+    strata
+    afp
+    arl
+    eps
+    rh
+    upz
+    role
+    statusUser
+    nameGuardian
+    lastNameGuardian
+    identificationGuardian
+    phoneGuardian
+    emailGuardian
+    addressGuardian
+  }
+}
+`;
+
+export { GET_USERS, GET_USER_BY_ID, GET_USERS_BY_ID };

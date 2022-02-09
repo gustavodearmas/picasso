@@ -1,133 +1,104 @@
-import React, { useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import Modal from "../../../components/modal/modal";
+import LittleData from "../../../components/exportPDF/LittleData";
+import { useReactToPrint } from "react-to-print";
 import UserContext from "../../../context/UserContext";
-import { jsPDF } from "jspdf";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  PDFViewer,
-} from "@react-pdf/renderer";
-import ButtonBorder from "../../../components/buttoms/buttonBorder";
+import ButtonBackground from "../../../components/buttoms/ButtonBackground";
+import { GET_USERS_BY_ID } from "../../../graphql/user/querys";
+import { useQuery } from "@apollo/client";
+import { Enum_User_Key } from "../../../utils/enums";
 
-const ExportDataPDF = ({ setPreViewPDF, data }) => {
-  const styles = StyleSheet.create({
-    table: {
-      display: "table",
-      borderStyle: "solid",
-      borderWidth: 0.5,
-      borderRightWidth: 0,
-      borderBottomWidth: 0,
-      textAlign: "left",
-    },
-    tableRow: {
-      margin: "auto",
-      flexDirection: "row",
-    },
-    tableHead: {
-      margin: "auto",
-      flexDirection: "row",
-      backgroundColor: "#474B4E",
-      color: "white",
-    },
-    tableCol: {
-      width: "10%",
-      borderStyle: "solid",
-      paddingHorizontal: "2px",
-      borderWidth: 0.5,
-      borderLeftWidth: 0,
-      borderTopWidth: 0,
-    },
-    tableCell: { marginTop: 5, fontSize: 7 },
-    tableCellHead: { marginTop: 5, fontSize: 8 },
+const ExportDataPDF = ({ listUserToPDF }) => {
+  const { data, error, loading } = useQuery(GET_USERS_BY_ID, {
+    variables: { _id: listUserToPDF },
+  });
+  const { setPreViewPDF, dataByID } = useContext(UserContext);
+  const [valueKey, setValueKey] = useState([]);
+  const [filterValueKey, setFilterValueKey] = useState([]);
+  const [dataToPdfFiltered, setDataToPdfFiltered] = useState([]);
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
   });
 
-  const MyDocument = (
-    <Document>
-      <Page size="A4">
-        <View style={{ padding: 20 }}>
-          <View style={styles.table}>
-            {/* TableHeader */}
-            <View style={styles.tableHead}>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Product</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Type</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Period</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCellHead}>Price</Text>
-              </View>
-            </View>
-            {/* TableContent */}
-            <View style={styles.tableRow}>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>Gustavo Adolfo Martibez</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>3 User </Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>2019-02-20</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>dlk jabSLDKJBALSKD</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>5€</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Page>
-    </Document>
-  );
+  console.log("valueKey: ", valueKey);
+  console.log("filterValueKey: ", filterValueKey);
+  console.log("dataByID: ", dataByID);
+
+
+  const filterKey = (value, boolean) => {
+    if (boolean) {
+      setFilterValueKey([...filterValueKey, value]);
+    } else {
+      var newArray = filterValueKey.filter(function(f) { return f !== value })
+      setFilterValueKey(newArray)
+    }
+  };
+
+  useEffect(() => {
+    if (dataByID) {
+      setValueKey([Object.keys(dataByID.User)]);
+    }
+  }, [dataByID]);
+
+  useEffect(()=>{
+  //aqui va el cofigo de filterDataUserByFieldCheck
+  }, [filterValueKey])
 
   return (
     <Modal>
-      <PDFViewer style={{ width: "100%", height: "70vh" }}>
-        {MyDocument}
-      </PDFViewer>
-      <ButtonBorder text="Cerrar" onclick={() => setPreViewPDF(false)} />
+      <div className="relative bg-gray-400 p-4">
+        <div className="absolute w-9 h-9 bg-gray-500">
+          <div className="w-9 overflow-hidden inline-block">
+            <div className="h-16 bg-gray-400 rotate-45 transform origin-top-right"></div>
+          </div>
+        </div>
+        <div className="bg-white flex py-2 overflow-auto justify-center h-96">
+          <ComponentToPrint listUserToPDF={listUserToPDF} ref={componentRef} />
+        </div>
+      </div>
+      <span className="text-xs font-bold">Filtros: </span>
+      <div className="flex flex-wrap justify-left text-xs  border my-1 px-2 py-1">
+        {valueKey[0] &&
+          valueKey[0].slice(2).map((o, pp) => {
+            return <ItemsCheck o={o} pp={pp} filterKey={filterKey} />;
+          })}
+      </div>
+      <div className="flex justify-end">
+        <ButtonBackground text="Imprimir" onclick={handlePrint} />
+        <ButtonBackground
+          text="Cerrar"
+          bg="bg-gray-500"
+          onclick={() => setPreViewPDF(false)}
+        />
+      </div>
     </Modal>
+  );
+};
+
+const ComponentToPrint = React.forwardRef((props, ref) => {
+  return (
+    <div ref={ref} className="px-10 pt-4">
+      <LittleData props={props} />
+    </div>
+  );
+});
+
+const ItemsCheck = ({ o, pp, filterKey }) => {
+  return (
+    <div key={pp} className="flex items-center mr-2">
+      <label htmlFor="" className="mr-1">
+        {Enum_User_Key[o]}
+      </label>
+      <input
+        type="checkbox"
+        name="nameUser"
+        className="h-3 w-3"
+        onChange={(e) => {
+          filterKey(o, e.target.checked);
+        }}
+      />
+    </div>
   );
 };
 

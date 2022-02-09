@@ -3,7 +3,6 @@ import SelectAllDelete from "./SelectAllDelete";
 import AvatarImage from "../../images/no-avatar.png";
 import { Enum_StatusUsers } from "../../utils/enums";
 import UserContext from "../../context/UserContext";
-import Line from "../../components/Line";
 
 const CardDataList = () => {
   const {
@@ -113,10 +112,7 @@ const ItemsUser = ({
 
   useEffect(() => {
     if (check) {
-      setListUserToPDF([
-        ...listUserToPDF,
-        { _idUser: _idUser, nameUser: nameUser, lastName: lastName },
-      ]);
+      setListUserToPDF([...listUserToPDF,_idUser,]);
     } else {
       const deleteItem = listUserToPDF.filter(
         (item) => item._idUser !== _idUser

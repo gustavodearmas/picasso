@@ -9,7 +9,7 @@ import {
 } from "@apollo/client";
 import SendMail from "./components/SendMail";
 import IndexR from "./pages/users/reports/IndexR";
-import Borrar from "./pages/users/Borrar";
+import Borrar from "./pages/users/reports/Borrar";
 
 // const httpLink = createHttpLink({
 //   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
@@ -31,8 +31,8 @@ function App() {
           <Route path="/admin" element={<PrivateLayouth />}>
             <Route path="users/" element={<Index />} />
             <Route path="users/sendmail" element={<SendMail />} />
-            <Route path="users/borrar" element={<Borrar/>} />
             <Route path="users/filter-data" element={<IndexR />} />
+            <Route path="users/borrar" element={<Borrar />} />
           </Route>
         </Routes>
       </BrowserRouter>

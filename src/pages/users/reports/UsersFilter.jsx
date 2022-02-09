@@ -16,9 +16,9 @@ const UsersExportPDF = () => {
     listUserToPDF,
     preViewPDF,
     setPreViewPDF,
-    dataByID,
   } = useContext(UserContext);
-  const [valueKey, setValueKey] = useState([]);
+
+  console.log("listUserToPDF", listUserToPDF)
 
   useEffect(() => {
     if (data) {
@@ -35,12 +35,6 @@ const UsersExportPDF = () => {
   useEffect(() => {
     setById(true);
   }, []);
-
-  useEffect(() => {
-    if (dataByID) {
-      setValueKey([Object.keys(dataByID.User)]);
-    }
-  }, [dataByID]);
 
   return (
     <>
@@ -61,9 +55,9 @@ const UsersExportPDF = () => {
           <Line />
           <div className="flex flex-wrap justify-center content-center h-full">
             {listUserToPDF.length !== 0
-              ? listUserToPDF.map((item) => {
+              ? listUserToPDF.map((item, key) => {
                   return (
-                    <div className="flex flex-col justify-center border rounded-md text-sm mb-1 px-4 py-1 mx-1 ">
+                    <div key={key} className="flex flex-col justify-center border border-parotia-3 rounded-md text-sm mb-1 px-4 py-1 mx-1 ">
                       <div className="flex justify-center">
                         <img
                           className="object-cover object-center w-10 h-10 mt-1"
@@ -79,33 +73,14 @@ const UsersExportPDF = () => {
                 })
               : "Seleccione los usuarios a impirmir"}
           </div>
-          <Line />
-          <span className="py-2">Filtros: </span>
-          <div className="flex flex-wrap justify-left h-20 overflow-auto">
-            {valueKey[0] &&
-              valueKey[0].slice(2).map((o) => {
-                return <ItemsCheck o={o} />;
-              })}
-          </div>
         </div>
       </div>
       {preViewPDF ? (
-        <ExportDataPDF setPreViewPDF={setPreViewPDF} data={listUserToPDF} />
+        <ExportDataPDF listUserToPDF={listUserToPDF} />
       ) : (
         <></>
       )}
     </>
-  );
-};
-
-const ItemsCheck = ({ o }) => {
-  return (
-    <div className="flex items-center mr-2">
-      <label htmlFor="" className="mr-1">
-        {o}
-      </label>
-      <input type="checkbox" name="nameUser" />
-    </div>
   );
 };
 
