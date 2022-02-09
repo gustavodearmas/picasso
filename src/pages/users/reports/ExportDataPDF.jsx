@@ -7,10 +7,12 @@ import ButtonBackground from "../../../components/buttoms/ButtonBackground";
 import { GET_USERS_BY_ID } from "../../../graphql/user/querys";
 import { useQuery } from "@apollo/client";
 import { Enum_User_Key } from "../../../utils/enums";
+import { filterObjectOnlyId } from "../../../utils/generalFunctions";
+import { filterDataUserBySelecctionCheck } from "../../../utils/generalFunctions";
 
 const ExportDataPDF = ({ listUserToPDF }) => {
   const { data, error, loading } = useQuery(GET_USERS_BY_ID, {
-    variables: { _id: listUserToPDF },
+    variables: { _id: filterObjectOnlyId(listUserToPDF) },
   });
   const { setPreViewPDF, dataByID } = useContext(UserContext);
   const [valueKey, setValueKey] = useState([]);
@@ -21,9 +23,11 @@ const ExportDataPDF = ({ listUserToPDF }) => {
     content: () => componentRef.current,
   });
 
-  console.log("valueKey: ", valueKey);
-  console.log("filterValueKey: ", filterValueKey);
-  console.log("dataByID: ", dataByID);
+   console.log("valueKey: ", valueKey);
+   console.log("filterValueKey: ", filterValueKey);
+   console.log("dataByID: ", dataByID);
+   console.log("listUserToPDF: ", listUserToPDF);
+   console.log("data: ", data);
 
 
   const filterKey = (value, boolean) => {
@@ -42,7 +46,11 @@ const ExportDataPDF = ({ listUserToPDF }) => {
   }, [dataByID]);
 
   useEffect(()=>{
-  //aqui va el cofigo de filterDataUserByFieldCheck
+    if(data){
+      const i = filterDataUserBySelecctionCheck(data.UsersById, filterValueKey);
+      setDataToPdfFiltered(i);
+    }
+ 
   }, [filterValueKey])
 
   return (
@@ -54,7 +62,7 @@ const ExportDataPDF = ({ listUserToPDF }) => {
           </div>
         </div>
         <div className="bg-white flex py-2 overflow-auto justify-center h-96">
-          <ComponentToPrint listUserToPDF={listUserToPDF} ref={componentRef} />
+          <ComponentToPrint listUserToPDF={dataToPdfFiltered} ref={componentRef} />
         </div>
       </div>
       <span className="text-xs font-bold">Filtros: </span>

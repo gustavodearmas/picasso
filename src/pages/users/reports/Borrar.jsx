@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 const Borrar = () => {
-  const nerList = [];
   const items = ["address", "addressGuardian", "afp"];
   const list = [
     {
@@ -19,10 +18,6 @@ const Borrar = () => {
   ];
 
   var listNew = [];
-  useEffect(() => {
-    filterDataUserBySelecctionCheck();
-  }, []);
-
   const filterDataUserBySelecctionCheck = () => {
     for (let i in list) {
       let kk = {};
@@ -36,6 +31,8 @@ const Borrar = () => {
       listNew.push(kk);
     }
   };
+
+
 
   return <div>hols</div>;
 };

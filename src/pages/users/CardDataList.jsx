@@ -112,14 +112,19 @@ const ItemsUser = ({
 
   useEffect(() => {
     if (check) {
-      setListUserToPDF([...listUserToPDF,_idUser,]);
+      setListUserToPDF([
+        ...listUserToPDF,
+        { _id: _idUser, nameUser: nameUser, lastName: lastName },
+      ]);
     } else {
       const deleteItem = listUserToPDF.filter(
-        (item) => item._idUser !== _idUser
+        (item) => item._id !== _idUser
       );
       setListUserToPDF(deleteItem);
     }
   }, [check]);
+
+  
 
   const byIdF = () => {
     if (byId) {

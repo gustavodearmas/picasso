@@ -18,8 +18,6 @@ const UsersExportPDF = () => {
     setPreViewPDF,
   } = useContext(UserContext);
 
-  console.log("listUserToPDF", listUserToPDF)
-
   useEffect(() => {
     if (data) {
       setListUserFiltered(
