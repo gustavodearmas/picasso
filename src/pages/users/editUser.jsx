@@ -16,7 +16,7 @@ import UserContext from "../../context/UserContext";
 const EditUser = () => {
   const { form, formData, updateFormData } = useFormData(null);
   const navigate = useNavigate();
-  const {setEditUser, dataByID, refetch} = useContext(UserContext);
+  const {setEditUser, dataQueryOneUserById, refetch} = useContext(UserContext);
   
   const [
     editUser,
@@ -25,7 +25,7 @@ const EditUser = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    formData._id = dataByID.User._id;
+    formData._id = dataQueryOneUserById.User._id;
     formData.strata = parseFloat(formData.strata)
     editUser({variables: formData});
   }
@@ -55,39 +55,39 @@ const EditUser = () => {
       <form onSubmit={submitForm} onChange={updateFormData} ref={form}>
         <div className="flex">
           <div className="w-3/6 px-10">
-            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} defaultValue={dataByID.User.statusUser} />
-            <DropDown label="Rol" type="text" name="role" defaultValue={dataByID.User.role}  options={Enum_Role} />
-            <Input label="Nombres" type="text" name="nameUser" defaultValue={dataByID.User.nameUser}  />
-            <Input label="Apellidos" type="text" name="lastName" defaultValue={dataByID.User.lastName}  />
-            <Input label="Identificación" type="text" name="identification" defaultValue={dataByID.User.identification}  />
-            <Input label="Ciudad de Nacimiento" type="text" name="cityBirth" defaultValue={dataByID.User.cityBirth}  />
-            <Input label="Nacionalidad" type="text" name="nationality" defaultValue={dataByID.User.nationality}  />
-            <Input label="Fecha Nacimiento" type="text" name="birthDay" defaultValue={dataByID.User.birthDay.slice(0,10)}  />
-            <Input label="Foto (url)" type="text" name="photo" defaultValue={dataByID.User.photo}  />
-            <Input label="Email" type="text" name="email" defaultValue={dataByID.User.email}  />
-            <Input label="Teléfono" type="text" name="phone" defaultValue={dataByID.User.phone}  />
-            <Input label="Celular" type="text" name="movil" defaultValue={dataByID.User.movil}  />
-            <Input label="Dirección" type="text" name="address" defaultValue={dataByID.User.address}  />
-            <Input label="UPZ" type="text" name="upz" defaultValue={dataByID.User.upz}  />
-            <Input label="Estrato" type="number" name="strata" defaultValue={dataByID.User.strata}  />
-            <DropDown label="RH" name="rh" defaultValue={dataByID.User.rh} options={Enum_RH} />
+            <DropDown label="Estado" type="text" name="statusUser" options={Enum_StatusUsers} defaultValue={dataQueryOneUserById.User.statusUser} />
+            <DropDown label="Rol" type="text" name="role" defaultValue={dataQueryOneUserById.User.role}  options={Enum_Role} />
+            <Input label="Nombres" type="text" name="nameUser" defaultValue={dataQueryOneUserById.User.nameUser}  />
+            <Input label="Apellidos" type="text" name="lastName" defaultValue={dataQueryOneUserById.User.lastName}  />
+            <Input label="Identificación" type="text" name="identification" defaultValue={dataQueryOneUserById.User.identification}  />
+            <Input label="Ciudad de Nacimiento" type="text" name="cityBirth" defaultValue={dataQueryOneUserById.User.cityBirth}  />
+            <Input label="Nacionalidad" type="text" name="nationality" defaultValue={dataQueryOneUserById.User.nationality}  />
+            <Input label="Fecha Nacimiento" type="text" name="birthDay" defaultValue={dataQueryOneUserById.User.birthDay.slice(0,10)}  />
+            <Input label="Foto (url)" type="text" name="photo" defaultValue={dataQueryOneUserById.User.photo}  />
+            <Input label="Email" type="text" name="email" defaultValue={dataQueryOneUserById.User.email}  />
+            <Input label="Teléfono" type="text" name="phone" defaultValue={dataQueryOneUserById.User.phone}  />
+            <Input label="Celular" type="text" name="movil" defaultValue={dataQueryOneUserById.User.movil}  />
+            <Input label="Dirección" type="text" name="address" defaultValue={dataQueryOneUserById.User.address}  />
+            <Input label="UPZ" type="text" name="upz" defaultValue={dataQueryOneUserById.User.upz}  />
+            <Input label="Estrato" type="number" name="strata" defaultValue={dataQueryOneUserById.User.strata}  />
+            <DropDown label="RH" name="rh" defaultValue={dataQueryOneUserById.User.rh} options={Enum_RH} />
            
           </div>
           <div className="w-3/6 px-10">
-            <DropDown label="Localidad" name="locality" defaultValue={dataByID.User.locality}  options={Enum_Locality} />
-            <DropDown label="EPS" name="eps" defaultValue={dataByID.User.eps}  options={Enum_EPS} />
-            <DropDown label="ARL" name="arl" defaultValue={dataByID.User.arl}  options={Enum_ARL}/>
-            <DropDown label="AFP" name="afp" defaultValue={dataByID.User.afp}  options={Enum_AFP}/>
-            <Input label="Contato de Emergencia" type="text" name="emergencyContact" defaultValue={dataByID.User.emergencyContact}  />
+            <DropDown label="Localidad" name="locality" defaultValue={dataQueryOneUserById.User.locality}  options={Enum_Locality} />
+            <DropDown label="EPS" name="eps" defaultValue={dataQueryOneUserById.User.eps}  options={Enum_EPS} />
+            <DropDown label="ARL" name="arl" defaultValue={dataQueryOneUserById.User.arl}  options={Enum_ARL}/>
+            <DropDown label="AFP" name="afp" defaultValue={dataQueryOneUserById.User.afp}  options={Enum_AFP}/>
+            <Input label="Contato de Emergencia" type="text" name="emergencyContact" defaultValue={dataQueryOneUserById.User.emergencyContact}  />
             <Line/>
             <h6 className="text-md font-bold mt-4 mb-6">Acudiente</h6>
-            <Input label="Nombre" type="text" name="nameGuardian" defaultValue={dataByID.User.nameGuardian} />
-            <Input label="Apellido" type="text" name="lastNameGuardian" defaultValue={dataByID.User.lastNameGuardian} />
-            <Input label="Identificación" type="text" name="identificationGuardian" defaultValue={dataByID.User.identificationGuardian} />
-            <DropDown label="Parentesco" name="issuance" defaultValue={dataByID.User.issuance}  options={Enum_Issuance}/>
-            <Input label="Email" type="email" name="emailGuardian" defaultValue={dataByID.User.emailGuardian} />
-            <Input label="Dirección" type="text" name="addressGuardian" defaultValue={dataByID.User.addressGuardian} />
-            <Input label="Teléfono" type="text" name="phoneGuardian" defaultValue={dataByID.User.phoneGuardian} />
+            <Input label="Nombre" type="text" name="nameGuardian" defaultValue={dataQueryOneUserById.User.nameGuardian} />
+            <Input label="Apellido" type="text" name="lastNameGuardian" defaultValue={dataQueryOneUserById.User.lastNameGuardian} />
+            <Input label="Identificación" type="text" name="identificationGuardian" defaultValue={dataQueryOneUserById.User.identificationGuardian} />
+            <DropDown label="Parentesco" name="issuance" defaultValue={dataQueryOneUserById.User.issuance}  options={Enum_Issuance}/>
+            <Input label="Email" type="email" name="emailGuardian" defaultValue={dataQueryOneUserById.User.emailGuardian} />
+            <Input label="Dirección" type="text" name="addressGuardian" defaultValue={dataQueryOneUserById.User.addressGuardian} />
+            <Input label="Teléfono" type="text" name="phoneGuardian" defaultValue={dataQueryOneUserById.User.phoneGuardian} />
           </div>
         </div>
         <div className="flex justify-end mt-2 px-10">

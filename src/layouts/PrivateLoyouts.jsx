@@ -1,17 +1,16 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import SidebarSmall from "../components/sidebar-small";
 import Sidebar from "../components/sidebar";
 import Content from "../components/content";
 import { Outlet } from "react-router-dom";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 const PrivateLayouth = () => {
   const [sidebarResponsive, setSidebarResponsive] = useState(false);
   return (
     <div className="flex flex-row h-screen ">
-
       {sidebarResponsive ? <SmallSidebar /> : <SidebarBig />}
-      <div className="bg-gray-100 flex-auto flex flex-col relative ">
+      <div className="bg-gray-100 flex-auto flex flex-col relative">
         <div className="bg-parotia-3 pb-2 sticky">
           <div className="flex flex-row mt-4 items-center justify-center">
             <div className="w-20 ml-4">
@@ -31,7 +30,7 @@ const PrivateLayouth = () => {
         </div>
         <div className="m-1 flex-auto overflow-y-auto p-2">
           <Content>
-          <Toaster/>
+            <Toaster />
             <Outlet />
           </Content>
         </div>

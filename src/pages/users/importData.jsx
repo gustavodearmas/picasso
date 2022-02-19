@@ -50,7 +50,8 @@ const ImportData = () => {
               <div className="flex flex-col space-y-1 items-center  ">
                 <div className="container mx-auto h-full flex flex-col justify-center items-center">
                   <div className="flex w-full justify-center">
-                    <div className="flex py-1 inline-flex items-center px-4 bg-gray-600 border border-gray-600 rounded-l font-semibold cursor-pointer text-xs text-white tracking-widest hover:bg-gray-500 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition ">
+                    {/* // inline-flex agreagr abajo si se rompe el codigo  */}
+                    <div className="flex py-1 items-center px-4 bg-gray-600 border border-gray-600 rounded-l font-semibold cursor-pointer text-xs text-white tracking-widest hover:bg-gray-500 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4 mr-2"

@@ -15,8 +15,8 @@ const CardDataList = () => {
     byId,
     setById,
     setSearch,
-    listUserToPDF,
-    setListUserToPDF,
+    listToPDF,
+    setListToPDF,
   } = useContext(UserContext);
 
 
@@ -84,8 +84,8 @@ const CardDataList = () => {
                   photo={e.photo}
                   byId={byId}
                   setSearch={setSearch}
-                  listUserToPDF={listUserToPDF}
-                  setListUserToPDF={setListUserToPDF}
+                  listToPDF={listToPDF}
+                  setListToPDF={setListToPDF}
                 />
               </div>
             );
@@ -105,22 +105,22 @@ const ItemsUser = ({
   setID,
   byId,
   setSearch,
-  listUserToPDF,
-  setListUserToPDF,
+  listToPDF,
+  setListToPDF,
 }) => {
   const [check, setCheck] = useState(false);
 
   useEffect(() => {
     if (check) {
-      setListUserToPDF([
-        ...listUserToPDF,
+      setListToPDF([
+        ...listToPDF,
         { _id: _idUser, nameUser: nameUser, lastName: lastName },
       ]);
     } else {
-      const deleteItem = listUserToPDF.filter(
+      const deleteItem = listToPDF.filter(
         (item) => item._id !== _idUser
       );
-      setListUserToPDF(deleteItem);
+      setListToPDF(deleteItem);
     }
   }, [check]);
 

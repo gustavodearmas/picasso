@@ -19,8 +19,8 @@ const CardDetailData = () => {
   const [disableUser, { data, error }] = useMutation(DISABLE_USER);
   const [disable, setDisable] = useState(false);
   const [sendMail, setSendMail] = useState(false);
-  const {setEditUser, editUser, _id, dataByID } = useContext(UserContext);
-  console.log("dataByID", dataByID)
+  const {setEditUser, editUser, _id, dataQueryOneUserById } = useContext(UserContext);
+  console.log("dataQueryOneUserById", dataQueryOneUserById)
 
 
   useEffect(() => {
@@ -84,96 +84,96 @@ const CardDetailData = () => {
         <IconKeyValue
           icon="fas fa-id-badge"
           key_="Identificación"
-          value_={dataByID && dataByID.User.identification}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.identification}
         />
         <IconKeyValue2x1
           icon="fas fa-user"
           key_="Nombre"
-          value_={dataByID && dataByID.User.nameUser}
-          value_2={dataByID && dataByID.User.lastName}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.nameUser}
+          value_2={dataQueryOneUserById && dataQueryOneUserById.User.lastName}
           value_3=""
         />
         <IconKeyValue
           icon="fas fa-id-badge"
           key_="Ciudad de Nacimiento"
-          value_={dataByID && dataByID.User.cityBirth}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.cityBirth}
         />
         <IconKeyValue
           icon="fas fa-id-badge"
           key_="Nacionalidad"
-          value_={dataByID && dataByID.User.nationality}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.nationality}
         />
         <IconKeyValueX2
           icon="fas fa-birthday-cake"
           key_="Fecha de Nacimiento"
-          value_={dataByID && dataByID.User.birthDay.slice(0, 10)}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.birthDay.slice(0, 10)}
           value_2={
-            dataByID && calculateAge(dataByID.User.birthDay.slice(0, 10))
+            dataQueryOneUserById && calculateAge(dataQueryOneUserById.User.birthDay.slice(0, 10))
           }
         />
         <IconKeyValue
           icon="fas fa-syringe"
           key_="RH"
           value_={
-            dataByID && dataByID.User.rh && dataByID.User.rh.replace("_", " ")
+            dataQueryOneUserById && dataQueryOneUserById.User.rh && dataQueryOneUserById.User.rh.replace("_", " ")
           }
         />
         <IconKeyValue
           icon="fas fa-envelope"
           key_="Email"
-          value_={dataByID && dataByID.User.email}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.email}
         />
         <IconKeyValueX2
           icon="fas fa-phone-alt"
           key_="Teléfono"
           value_="3286212"
-          value_2={dataByID && dataByID.User.phone}
+          value_2={dataQueryOneUserById && dataQueryOneUserById.User.phone}
         />
         <IconKeyValue
           icon="fas fa-medkit"
           key_="EPS"
           value_={
-            dataByID && dataByID.User.eps && dataByID.User.eps.replace("_", " ")
+            dataQueryOneUserById && dataQueryOneUserById.User.eps && dataQueryOneUserById.User.eps.replace("_", " ")
           }
         />
         <IconKeyValue
           icon="fas fa-hand-holding-usd"
           key_="ARL"
           value_={
-            dataByID && dataByID.User.arl && dataByID.User.arl.replace("_", " ")
+            dataQueryOneUserById && dataQueryOneUserById.User.arl && dataQueryOneUserById.User.arl.replace("_", " ")
           }
         />
         <IconKeyValue
           icon="fas fa-blind"
           key_="AFP"
           value_={
-            dataByID && dataByID.User.afp && dataByID.User.afp.replace("_", " ")
+            dataQueryOneUserById && dataQueryOneUserById.User.afp && dataQueryOneUserById.User.afp.replace("_", " ")
           }
         />
         <IconKeyValue
           icon="fas fa-map-marker-alt"
           key_="Dirección"
-          value_={dataByID && dataByID.User.address}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.address}
         />
         <IconKeyValue
           icon="fas fa-arrow-alt-circle-up"
           key_="Estrato"
-          value_={dataByID && dataByID.User.strata}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.strata}
         />
         <IconKeyValueX2
           icon="fas fa-map-marked-alt"
           key_="UPZ/Localidad"
-          value_={dataByID && dataByID.User.upz}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.upz}
           value_2={
-            dataByID &&
-            dataByID.User.locality &&
-            dataByID.User.locality.replace("_", " ")
+            dataQueryOneUserById &&
+            dataQueryOneUserById.User.locality &&
+            dataQueryOneUserById.User.locality.replace("_", " ")
           }
         />
         <IconKeyValue
           icon="fas fa-arrow-alt-circle-up"
           key_="Contato de Emergencia"
-          value_={dataByID && dataByID.User.emergencyContact}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.emergencyContact}
         />
       </div>
       <Line />
@@ -182,35 +182,35 @@ const CardDetailData = () => {
         <IconKeyValue2x1
           icon="fas fa-user"
           key_="Nombre"
-          value_={dataByID && dataByID.User.nameGuardian}
-          value_2={dataByID && dataByID.User.lastNameGuardian}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.nameGuardian}
+          value_2={dataQueryOneUserById && dataQueryOneUserById.User.lastNameGuardian}
           value_3=""
         />
         <IconKeyValue
           icon="fas fa-id-badge"
           key_="Identificación"
-          value_={dataByID && dataByID.User.identificationGuardian}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.identificationGuardian}
         />
         <IconKeyValue
           icon="fas fa-users"
           key_="Parentesco"
-          value_={dataByID && dataByID.User.issuance}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.issuance}
         />
 
         <IconKeyValue
           icon="fas fa-map-marker-alt"
           key_="Dirección"
-          value_={dataByID && dataByID.User.addressGuardian}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.addressGuardian}
         />
         <IconKeyValue
           icon="fas fa-envelope"
           key_="Email"
-          value_={dataByID && dataByID.User.emailGuardian}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.emailGuardian}
         />
         <IconKeyValue
           icon="fas fa-phone-alt"
           key_="Teléfono"
-          value_={dataByID && dataByID.User.phoneGuardian}
+          value_={dataQueryOneUserById && dataQueryOneUserById.User.phoneGuardian}
         />
       </div>
       {disable ? (
@@ -219,7 +219,7 @@ const CardDetailData = () => {
         <></>
       )}
       {editUser ? <EditUser /> : <></>}
-      {sendMail ? <SendMail setSendMail={setSendMail} email={dataByID.User.email}/> : <></>}
+      {sendMail ? <SendMail setSendMail={setSendMail} email={dataQueryOneUserById.User.email}/> : <></>}
     </div>
   );
 };

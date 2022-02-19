@@ -1,20 +1,14 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import Modal from "../../../components/modal/modal";
-import LittleData from "../../../components/exportPDF/LittleData";
+import Modal from "../components/modal/modal";
+import A4ExportPDF from "../components/exportPDF/A4ExportPDF";
 import { useReactToPrint } from "react-to-print";
-import UserContext from "../../../context/UserContext";
-import ButtonBackground from "../../../components/buttoms/ButtonBackground";
-import { GET_USERS_BY_ID } from "../../../graphql/user/querys";
-import { useQuery } from "@apollo/client";
-import { Enum_User_Key } from "../../../utils/enums";
-import { filterObjectOnlyId } from "../../../utils/generalFunctions";
-import { filterDataUserBySelecctionCheck } from "../../../utils/generalFunctions";
+import ButtonBackground from "../components/buttoms/ButtonBackground";
+import { filterDataUserBySelecctionCheck } from "../utils/generalFunctions";
 
-const ExportDataPDF = ({ listUserToPDF }) => {
-  const { data, error, loading } = useQuery(GET_USERS_BY_ID, {
-    variables: { _id: filterObjectOnlyId(listUserToPDF) },
-  });
-  const { setPreViewPDF, dataByID } = useContext(UserContext);
+//ExportDataPDF recibe dos props, el primero eun array que se itera para extraer los campos a selecionar
+//para el filtro en la exportación, el segundo, es la data general que se va a incluir en el pdf.
+//El tecer props es el valor para cerrar el modal y el tulimo argumento es el emun con los campos a mostrar en los filtros
+const PDFModule = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
   const [valueKey, setValueKey] = useState([]);
   const [filterValueKey, setFilterValueKey] = useState([]);
   const [dataToPdfFiltered, setDataToPdfFiltered] = useState([]);
@@ -22,13 +16,6 @@ const ExportDataPDF = ({ listUserToPDF }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
-   console.log("valueKey: ", valueKey);
-   console.log("filterValueKey: ", filterValueKey);
-   console.log("dataByID: ", dataByID);
-   console.log("listUserToPDF: ", listUserToPDF);
-   console.log("data: ", data);
-
 
   const filterKey = (value, boolean) => {
     if (boolean) {
@@ -38,16 +25,15 @@ const ExportDataPDF = ({ listUserToPDF }) => {
       setFilterValueKey(newArray)
     }
   };
-
   useEffect(() => {
-    if (dataByID) {
-      setValueKey([Object.keys(dataByID.User)]);
+    if (keyValueItemsCheck) {
+      setValueKey([Object.keys(keyValueItemsCheck)]);
     }
-  }, [dataByID]);
+  }, [keyValueItemsCheck]);
 
   useEffect(()=>{
     if(data){
-      const i = filterDataUserBySelecctionCheck(data.UsersById, filterValueKey);
+      const i = filterDataUserBySelecctionCheck(Object.values(data)[0], filterValueKey);
       setDataToPdfFiltered(i);
     }
  
@@ -61,15 +47,15 @@ const ExportDataPDF = ({ listUserToPDF }) => {
             <div className="h-16 bg-gray-400 rotate-45 transform origin-top-right"></div>
           </div>
         </div>
-        <div className="bg-white flex py-2 overflow-auto justify-center h-96">
-          <ComponentToPrint listUserToPDF={dataToPdfFiltered} ref={componentRef} />
+        <div className="bg-white py-2 overflow-auto justify-center h-96">
+          <ComponentToPrint listToPDF={dataToPdfFiltered} ref={componentRef} />
         </div>
       </div>
       <span className="text-xs font-bold">Filtros: </span>
       <div className="flex flex-wrap justify-left text-xs  border my-1 px-2 py-1">
         {valueKey[0] &&
           valueKey[0].slice(2).map((o, pp) => {
-            return <ItemsCheck o={o} pp={pp} filterKey={filterKey} />;
+            return <ItemsCheck o={o} pp={pp} filterKey={filterKey} enumValue={enumValue} />
           })}
       </div>
       <div className="flex justify-end">
@@ -77,26 +63,27 @@ const ExportDataPDF = ({ listUserToPDF }) => {
         <ButtonBackground
           text="Cerrar"
           bg="bg-gray-500"
-          onclick={() => setPreViewPDF(false)}
+          onclick={() => setCloseModal(false)}
         />
       </div>
     </Modal>
   );
 };
 
+//Esto debería ser un componente
 const ComponentToPrint = React.forwardRef((props, ref) => {
   return (
-    <div ref={ref} className="px-10 pt-4">
-      <LittleData props={props} />
+    <div ref={ref} className="px-2 pt-4">
+      <A4ExportPDF props={props} />
     </div>
   );
 });
 
-const ItemsCheck = ({ o, pp, filterKey }) => {
+const ItemsCheck = ({ o, pp, filterKey, enumValue }) => {
   return (
     <div key={pp} className="flex items-center mr-2">
       <label htmlFor="" className="mr-1">
-        {Enum_User_Key[o]}
+        {enumValue[o]}
       </label>
       <input
         type="checkbox"
@@ -110,4 +97,11 @@ const ItemsCheck = ({ o, pp, filterKey }) => {
   );
 };
 
-export default ExportDataPDF;
+export default PDFModule;
+
+  //  console.log("valueKey: ", valueKey);
+  //  console.log("filterValueKey: ", filterValueKey);
+  //  console.log("dataQueryOneUserById: ", dataQueryOneUserById);
+  //  console.log("listToPDF: ", listToPDF);
+  //  console.log("data: ", data);
+

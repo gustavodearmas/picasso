@@ -5,7 +5,8 @@ import HeaderContent from "../HeaderContent";
 import AvatarImage from "../../../images/no-avatar.png";
 import Line from "../../../components/Line";
 import ButtonBorder from "../../../components/buttoms/buttonBorder";
-import ExportDataPDF from "./ExportDataPDF";
+import { Enum_User_Key } from "../../../utils/enums";
+import PDFModule from "../../PDFModule";
 
 const UsersExportPDF = () => {
   const {
@@ -13,9 +14,10 @@ const UsersExportPDF = () => {
     data,
     setListUserFiltered,
     search,
-    listUserToPDF,
+    listToPDF,
     preViewPDF,
     setPreViewPDF,
+    dataQueryManyUserById,
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -52,10 +54,13 @@ const UsersExportPDF = () => {
           </div>
           <Line />
           <div className="flex flex-wrap justify-center content-center h-full">
-            {listUserToPDF.length !== 0
-              ? listUserToPDF.map((item, key) => {
+            {listToPDF.length !== 0
+              ? listToPDF.map((item, key) => {
                   return (
-                    <div key={key} className="flex flex-col justify-center border border-parotia-3 rounded-md text-sm mb-1 px-4 py-1 mx-1 ">
+                    <div
+                      key={key}
+                      className="flex flex-col justify-center border border-parotia-3 rounded-md text-sm mb-1 px-4 py-1 mx-1 "
+                    >
                       <div className="flex justify-center">
                         <img
                           className="object-cover object-center w-10 h-10 mt-1"
@@ -74,7 +79,12 @@ const UsersExportPDF = () => {
         </div>
       </div>
       {preViewPDF ? (
-        <ExportDataPDF listUserToPDF={listUserToPDF} />
+        <PDFModule
+          keyValueItemsCheck={dataQueryManyUserById.UsersById[0]}
+          data={dataQueryManyUserById}
+          setCloseModal={setPreViewPDF}
+          enumValue={Enum_User_Key}
+        />
       ) : (
         <></>
       )}
