@@ -6,8 +6,7 @@ import AvatarImage from "../../../images/no-avatar.png";
 import Line from "../../../components/Line";
 import ButtonBorder from "../../../components/buttoms/buttonBorder";
 import { Enum_User_Key } from "../../../utils/enums";
-import ModulePDF from "../../ModulePDF";
-
+import ModulePDF from "../../../components/ModulePDF";
 const UsersExportPDF = () => {
   const {
     setById,

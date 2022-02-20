@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { filterDataUserBySelecctionCheck } from "../utils/generalFunctions";
-import ModalPDF from "../components/modal/ModalPDF";
+import ModalPDF from "./modal/ModalPDF";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { PDFObject } from "react-pdfobject";
 
+//ExportDataPDF recibe dos props, el primero eun array que se itera para extraer los campos a selecionar
+//para el filtro en la exportación, el segundo, es la data general que se va a incluir en el pdf.
+//El tecer props es el valor para cerrar el modal y el tulimo argumento es el emun con los campos a mostrar en los filtros
 const ModulePDF = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
   const [valueKey, setValueKey] = useState([]);
   const [filterValueKey, setFilterValueKey] = useState([]);
