@@ -1,23 +1,31 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
-import Modal from "../components/modal/modal";
-import A4ExportPDF from "../components/exportPDF/A4ExportPDF";
-import { useReactToPrint } from "react-to-print";
-import ButtonBackground from "../components/buttoms/ButtonBackground";
+import React, { useState, useEffect } from "react";
 import { filterDataUserBySelecctionCheck } from "../utils/generalFunctions";
 import ModalPDF from "../components/modal/ModalPDF";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { PDFObject } from "react-pdfobject";
 
-const Test2Borrar = ({
-  keyValueItemsCheck,
-  data,
-  setCloseModal,
-  enumValue,
-}) => {
+const ModulePDF = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
   const [valueKey, setValueKey] = useState([]);
   const [filterValueKey, setFilterValueKey] = useState([]);
   const [dataToPdfFiltered, setDataToPdfFiltered] = useState([]);
+  const [dataBodyPDFObject, setDataBodyPDFObject] = useState([]);
+  const [dataHeadPDFObject, setDataHeadPDFObject] = useState([]);
+  const [uri, setUri] = useState("");
+  const doc = new jsPDF();
+
+  const dataToPDFObject = () => {
+    const body = [];
+    const head = [];
+    Object.entries(dataToPdfFiltered).forEach(([key, value]) => {
+      body.push(Object.values(value));
+    });
+    setDataBodyPDFObject(body);
+    filterValueKey.map((k) => {
+      head.push(enumValue[k]);
+    });
+    setDataHeadPDFObject(head);
+  };
 
   const filterKey = (value, boolean) => {
     if (boolean) {
@@ -29,9 +37,30 @@ const Test2Borrar = ({
       setFilterValueKey(newArray);
     }
   };
+
+  const verPDF = () => {
+    doc.autoTable({
+      head: [dataHeadPDFObject],
+      body: dataBodyPDFObject,
+      theme: "grid",
+      styles: {
+        fontSize: 7,
+      },
+      headStyles: { fillColor: [49, 156, 140] },
+      tableWidth: "wrap",
+    });
+    //doc.save("table.pdf");
+    setUri(doc.output("bloburi"));
+  };
+
+  useEffect(() => {
+   
+  }, []);
+
   useEffect(() => {
     if (keyValueItemsCheck) {
       setValueKey([Object.keys(keyValueItemsCheck)]);
+      //dataBody();
     }
   }, [keyValueItemsCheck]);
 
@@ -45,42 +74,32 @@ const Test2Borrar = ({
     }
   }, [filterValueKey]);
 
-  const [uri, setUri] = useState("");
-  var head = [["Name", "Email", "Country"]];
-  var body = [
-    ["David", "david@example.com", "Sweden"],
-    ["Castille", "castille@example.com", "Spain"],
-  ];
+  useEffect(() => {
+    if (dataToPdfFiltered) {
+      dataToPDFObject();
+      verPDF();
+    }
+  }, [dataToPdfFiltered]);
 
-  const doc = new jsPDF();
+  useEffect(() => {
+    if (dataBodyPDFObject) {
+      verPDF();
+    }
+  }, [dataBodyPDFObject]);
 
-  const verPDF = () => {
-    doc.autoTable({
-      head: head,
-      body: body,
-      theme: "grid",
-      styles: {
-        fontSize: 7,
-      },
-      headStyles: { fillColor: [49, 156, 140] },
-      tableWidth: "wrap",
-    });
-    //doc.save("table.pdf");
-    setUri(doc.output("bloburi"));
-  };
 
   return (
     <ModalPDF>
       <div className="flex pt-4">
         <div className="absolute top-3 right-3 text-red-300">
-          <button  onClick={() => setCloseModal(false)}>
+          <button onClick={() => setCloseModal(false)}>
             <i class="fal fa-times-circle"></i>
           </button>
         </div>
         <div className="w-3/12">
           <span className="flex text-xs font-bold my-3">Filtros: </span>
           <div className="flex flex-col place-content-between h-full">
-            <div className="flex flex-wrap justify-left text-xs border my-1 px-2 py-1">
+            <div className="flex flex-col h-auto justify-left text-xs border my-1 px-2 py-1">
               {valueKey[0] &&
                 valueKey[0].slice(2).map((o, pp) => {
                   return (
@@ -92,9 +111,6 @@ const Test2Borrar = ({
                     />
                   );
                 })}
-            </div>
-            <div className="flex justify-end">
-              <button onClick={() => verPDF()}>Visualizar</button>
             </div>
           </div>
         </div>
@@ -111,9 +127,6 @@ const Test2Borrar = ({
 const ItemsCheck = ({ o, pp, filterKey, enumValue }) => {
   return (
     <div key={pp} className="flex items-center mr-2">
-      <label htmlFor="" className="mr-1">
-        {enumValue[o]}
-      </label>
       <input
         type="checkbox"
         name="nameUser"
@@ -122,8 +135,11 @@ const ItemsCheck = ({ o, pp, filterKey, enumValue }) => {
           filterKey(o, e.target.checked);
         }}
       />
+      <label htmlFor="" className="mr-1">
+        {enumValue[o]}
+      </label>
     </div>
   );
 };
 
-export default Test2Borrar;
+export default ModulePDF;

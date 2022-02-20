@@ -6,7 +6,7 @@ import AvatarImage from "../../../images/no-avatar.png";
 import Line from "../../../components/Line";
 import ButtonBorder from "../../../components/buttoms/buttonBorder";
 import { Enum_User_Key } from "../../../utils/enums";
-import PDFModule from "../../PDFModule";
+import ModulePDF from "../../ModulePDF";
 
 const UsersExportPDF = () => {
   const {
@@ -79,7 +79,7 @@ const UsersExportPDF = () => {
         </div>
       </div>
       {preViewPDF ? (
-        <PDFModule
+        <ModulePDF
           keyValueItemsCheck={dataQueryManyUserById.UsersById[0]}
           data={dataQueryManyUserById}
           setCloseModal={setPreViewPDF}

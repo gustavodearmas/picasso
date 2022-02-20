@@ -1,8 +1,8 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import Modal from "../components/modal/modal";
-import A4ExportPDF from "../components/exportPDF/A4ExportPDF";
+import Modal from "./modal/modal";
+import A4ExportPDF from "./exportPDF/A4ExportPDF";
 import { useReactToPrint } from "react-to-print";
-import ButtonBackground from "../components/buttoms/ButtonBackground";
+import ButtonBackground from "./buttoms/ButtonBackground";
 import { filterDataUserBySelecctionCheck } from "../utils/generalFunctions";
 
 //ExportDataPDF recibe dos props, el primero eun array que se itera para extraer los campos a selecionar

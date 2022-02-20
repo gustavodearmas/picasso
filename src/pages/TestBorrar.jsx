@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { PDFObject } from 'react-pdfobject';
-import Test2Borrar from "./Test2Borrar";
 
 const TestBorrar = () => {
   const [uri, setUri] = useState("");
@@ -32,7 +31,6 @@ const TestBorrar = () => {
   return (
     <div>
       <button onClick={() => verPDF()}>Visualizar</button>
-      <Test2Borrar/>
       {/* <div className="flex justify-center">
       <PDFObject url={uri} width="900px" height="500px" />
       </div> */}
