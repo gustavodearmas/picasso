@@ -1,10 +1,10 @@
 import React, {useContext, useEffect} from "react";
 import Modal from "../../components/modal/modal";
 import ButtomBig from "../../components/buttoms/buttomBig";
-import Input from "../../components/Input";
-import DropDown from "../../components/dropDown";
+import Input from "../../components/inputs/Input";
+import DropDown from "../../components/dropdown/dropDown";
 import useFormData from "../../hook/user/useFormData";
-import Line from "../../components/Line";
+import Line from "../../components/ultils/Line";
 import { EDIT_USER } from "../../graphql/user/mutations";
 import { useMutation } from "@apollo/client";
 import toast from 'react-hot-toast';
@@ -97,6 +97,7 @@ const EditUser = () => {
             onclick={() => {
               setEditUser(false);
             }}
+            type="button"
           />
       
         </div>

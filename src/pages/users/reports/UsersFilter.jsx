@@ -3,10 +3,10 @@ import CardDataList from "../CardDataList";
 import UserContext from "../../../context/UserContext";
 import HeaderContent from "../HeaderContent";
 import AvatarImage from "../../../images/no-avatar.png";
-import Line from "../../../components/Line";
+import Line from "../../../components/ultils/Line";
 import ButtonBorder from "../../../components/buttoms/buttonBorder";
 import { Enum_User_Key } from "../../../utils/enums";
-import ModulePDF from "../../../components/ModulePDF";
+import ModulePDF from "../../../components/ultils/ModulePDF";
 const UsersExportPDF = () => {
   const {
     setById,

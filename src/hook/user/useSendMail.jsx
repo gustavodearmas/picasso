@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
 
 const useSendMail = (formData, setSendMail) => {
-    console.log("formData: ", formData)
+  //console.log("formData: ", formData)
   const [createUser, { data, loading, error }] = useMutation(SEND_MAIL);
 
   const submitForm = (e) => {

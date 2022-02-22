@@ -14,7 +14,7 @@ const useFormData = (initial) => {
   const updateFormData = () => {
     setFormData(getFormData());
   };
-  console.log("formData: ___", formData)
+  //console.log("formData: ___", formData)
   return { form, formData, updateFormData };
 };
 

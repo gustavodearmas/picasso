@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AvatarImage from "../../images/no-avatar.png";
 import ButtonBorder from "../../components/buttoms/buttonBorder";
 import ButtonBackground from "../../components/buttoms/ButtonBackground";
-import Line from "../../components/Line";
+import Line from "../../components/ultils/Line";
 import IconKeyValue from "../../components/user/iconKeyValue";
 import IconKeyValueX2 from "../../components/user/iconKeyValueX2";
 import IconKeyValue2x1 from "../../components/user/iconKeyValue2x1";
@@ -10,17 +10,17 @@ import { calculateAge } from "../../utils/generalFunctions";
 import { useMutation } from "@apollo/client";
 import { DISABLE_USER } from "../../graphql/user/mutations";
 import toast from "react-hot-toast";
-import DisableRecord from "../../components/DisableRecord";
+import DisableRecord from "../../components/ultils/DisableRecord";
 import UserContext from "../../context/UserContext";
 import EditUser from "./EditUser";
-import SendMail from "../../components/SendMail";
+import SendMail from "../../components/ultils/SendMail";
 
 const CardDetailData = () => {
   const [disableUser, { data, error }] = useMutation(DISABLE_USER);
   const [disable, setDisable] = useState(false);
   const [sendMail, setSendMail] = useState(false);
-  const {setEditUser, editUser, _id, dataQueryOneUserById } = useContext(UserContext);
-  console.log("dataQueryOneUserById", dataQueryOneUserById)
+  const {setEditUser, editUser, _id, dataQueryOneUserById, refetch } = useContext(UserContext);
+  //console.log("dataQueryOneUserById", dataQueryOneUserById)
 
 
   useEffect(() => {
@@ -60,6 +60,7 @@ const CardDetailData = () => {
             text="Email"
             icon="fas fa-envelope-open-text pr-2"
             onclick={()=>setSendMail(true)}
+            type="button"
           />
         </div>
       </div>
@@ -214,7 +215,7 @@ const CardDetailData = () => {
         />
       </div>
       {disable ? (
-        <DisableRecord mutation={disableUser} id={_id} setDisable={setDisable} />
+        <DisableRecord mutation={disableUser} id={_id} setDisable={setDisable} refetch={refetch} />
       ) : (
         <></>
       )}
