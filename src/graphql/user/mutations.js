@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+let o = undefined;
 
 const CREATE_USER = gql`
   mutation CreateUser(
@@ -64,6 +65,32 @@ const CREATE_USER = gql`
     }
   }
 `;
+
+console.log(typeof(CREATE_USER.loc.source.body) )
+// let pp = [];
+// let hh = String;
+// let l = false;
+// for(let c of o ){
+//   if(c === "$"){
+//     l=true;
+//   }
+//   if(l){
+//     hh = hh.concat(c);
+//     console.log("hh: ", hh)
+//   }
+//   if( c === ":"){
+//     pp.push(hh);
+//     hh = [];
+//     l = false;
+//   }
+
+// }
+// console.log("pp: ", pp)
+
+// CREATE_USER.loc.source.body.map((p)=>{
+//   console.log("ddddddd",  p);
+// })
+
 
 const EDIT_USER = gql`
   mutation EditUser(

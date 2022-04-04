@@ -2,21 +2,24 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 
-const useImportData = (file, mutation, run) => {
-  const [dataP, setData_] = useState([])
+const useImportData = (file, mutation, validateKeyExcel, runImportExcel) => {
+  const [dataP, setData_] = useState([]);
 
   useEffect(() => {
-    if (run === true) {
+    if (validateKeyExcel || runImportExcel === true) {
       readExcel(file);
     }
-  }, [run, file]);
- 
+  }, [validateKeyExcel, file, runImportExcel]);
+
   const listKeyField = () => {
-    const r = Object.keys(dataP);
-    return r;
+    if (validateKeyExcel === true) {
+      const r = Object.keys(dataP);
+      return r;
+    }
   };
 
   const readExcel = (file) => {
+    console.log("b");
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsArrayBuffer(file);
@@ -33,38 +36,35 @@ const useImportData = (file, mutation, run) => {
         reject(error);
       };
     });
-    //setPromise_(promise);
+    if (runImportExcel) {
+      promise.then((d) => {
+        console.log("jj", d);
+        d.forEach((u) => {
+          console.log("ee: ", u)
+          mutation({ variables: u })
+            .then((a) => {})
+            .catch((e) => {
+              if (e["message"].includes("duplicate")) {
+                toast.error(
+                  `Campos duplicados: ${e["message"]
+                    .slice(80)
+                    .replace("}", " ")}`,
+                  { position: "top-right" }
+                );
+              }
+              toast.error(
+                `Se produjo el siguiente error: ${e.networkError.result.errors[0].message}`,
+                { position: "top-right" }
+              );
+            }
+            );
+        }
+        );
+      });
+    }
   };
-  
-  
-  
-  // const promiseFuntion = (promiseP) => {
-  //   promise.then((d) => {
-  //     console.log("jj", d)
-  //     d.forEach((u) => {
-  //       mutation({ variables: u })
-  //         .then((a) => {})
-  //         .catch((e) => {
-  //           if (e["message"].includes("duplicate")) {
-  //             toast.error(
-  //               `Campos duplicados: ${e["message"]
-  //                 .slice(80)
-  //                 .replace("}", " ")}`,
-  //               { position: "top-right" }
-  //             );
-  //           }
-  //           toast.error(
-  //             `Se produjo el siguiente error: ${e.networkError.result.errors[0].message}`,
-  //             { position: "top-right" }
-  //           );
-  //         });
-  //     });
-  //   });
-  // };
-  
-  return { listKeyField }
 
- 
+  return { listKeyField };
 };
 
 export default useImportData;

@@ -109,12 +109,12 @@ const Enum_User_Key = {
   upz: "UPZ",
   role: "Role",
   statusUser: "Estado",
-  nameGuardian: "Acudiente ",
-  lastNameGuardian: "Apellidos",
-  identificationGuardian: "Identificación",
-  phoneGuardian: "Teléfono",
-  emailGuardian: "Email",
-  addressGuardian: "Dirección",
+  nameGuardian: "Nombre Acudiente",
+  lastNameGuardian: "Apellidos Acudiente",
+  identificationGuardian: "Identificación Acudiente",
+  phoneGuardian: "Teléfono Acudiente",
+  emailGuardian: "Email Acudiente",
+  addressGuardian: "Dirección Acudiente",
 };
 
 export {
