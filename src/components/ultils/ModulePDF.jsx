@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { filterDataUserBySelecctionCheck } from "../../utils/generalFunctions";
-import ModalPDF from "../modal/ModalPDF";
+import Modal from "../modal/modal";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { PDFObject } from "react-pdfobject";
@@ -10,7 +10,7 @@ import useExportData from "../../hook/useExportData";
 //ModulePDF recibe 4 props:
 //keyValueItemsCheck: es un objecto que contiene las claves que queremos mostrar en los encabezados de las tablas, generalmente usamos el primer objecto de la data. Ejemplo: data[0][0]
 //data: es un objecto que tiene toda la información sin filtrar de los registros selecionados, debe tener un solo elemento para poder obtener os valores asi; data[0]
-//setCloseModal: es la funcion que permite cerrar la ventana modal. 
+//setCloseModal: es la funcion que permite cerrar la ventana modal.
 //enumValue: es un objeto que tiene las claves y su valor debe ser el valor real que se renderizará en el front. Ejemplo: {user: Usuario}
 const ModulePDF = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
   const [valueKey, setValueKey] = useState([]);
@@ -91,42 +91,48 @@ const ModulePDF = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
     }
   }, [dataBodyPDFObject]);
 
-
   return (
-    <ModalPDF>
-      <div className="flex pt-4">
-        <div className="absolute top-2 left-3 text-gray-300">
-          <button onClick={() => setCloseModal(false)}>
-            <i className="fal fa-times-circle"></i>
-          </button>
-        </div>
-        <div className="w-3/12">
-          <div className="flex text-xs font-bold justify-between my-3">
-          <span className="flex items-end">Filtros: </span>
-          <ButtonBackground text="Excel" icon="fas fa-download" onclick={()=>{exportdata()}} type="button"/> 
-          </div>
-          <div className="flex flex-col place-content-between h-full">
-            <div className="flex flex-col h-auto justify-left text-xs border my-1 px-2 py-1">
-              {valueKey[0] &&
-                valueKey[0].slice(2).map((o) => {
-                  return (
-                    <div key={o} className="flex items-center mr-2">
-                    <ItemsCheck
-                      o={o}
-                      filterKey={filterKey}
-                      enumValue={enumValue}
-                    />
-                    </div>
-                  );
-                })}
+    <Modal onClick={setCloseModal}>
+      
+        <div className="lg:flex">
+          <div className="lg:w-3/12 ">
+            <div className="">
+              <div className="flex text-xs font-bold justify-between my-3">
+                <span className="flex items-end">Filtros: selecciona los items a exportar</span>
+                <ButtonBackground
+                  text="Descargar"
+                  icon="fas fa-download"
+                  onclick={() => {
+                    exportdata();
+                  }}
+                  type="button"
+                />
+              </div>
+              <div className="flex-col place-content-between">
+                <div className="flex flex-wrap lg:flex-col h-auto justify-left text-xs border my-1 px-2 py-1">
+                  {valueKey[0] &&
+                    valueKey[0].slice(2).map((o) => {
+                      return (
+                        <div key={o} className="flex items-center mr-2">
+                          <ItemsCheck
+                            o={o}
+                            filterKey={filterKey}
+                            enumValue={enumValue}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
             </div>
           </div>
+          <div className="lg:w-9/12 lg:ml-4 lg:flex-col justify-center bg-red-500 lg:bg-white text-sm text-white px-4 py-2 lg:p-0 rounded-md">
+            <PDFObject url={uri} width='100%' height='700px'/>
+          </div>
         </div>
-        <div className="w-9/12 ml-5  flex justify-center">
-          <PDFObject url={uri} width="600px" height="500px" />
-        </div>
-      </div>
-    </ModalPDF>
+     
+     
+    </Modal>
   );
 };
 
@@ -134,7 +140,7 @@ const ModulePDF = ({ keyValueItemsCheck, data, setCloseModal, enumValue }) => {
 
 const ItemsCheck = ({ o, filterKey, enumValue }) => {
   return (
-   <>
+    <>
       <input
         type="checkbox"
         name="nameUser"

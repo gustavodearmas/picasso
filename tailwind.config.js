@@ -26,6 +26,7 @@ module.exports = {
       },
       textColor: {
         menta: {
+          200: "#2B5F61",
           100: "#0A6F5D",
           80: "#27997D",
           60: "#53A598",

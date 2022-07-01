@@ -13,12 +13,12 @@ const DropDown = ({ label, name, defaultValue="", required, options }) => {
   }, [defaultValue]);
   //console.log("selectedValue: ", selectedValue)
   return (
-    <div className="flex items-center my-1">
-      <label className="block mb-1 text-gray-600 font-bold text-xs mr-2 w-7/12" htmlFor={name}>
+    <div className="flex-col items-center mb-3 text-sm">
+      <label className="block text-gray-600 font-bold mb-2" htmlFor={name}>
         {label}
       </label>
       <select
-        className="bg-white rounded-md text-gray-600 px-2 py-1 focus:outline-none text-xs w-5/12"
+        className="bg-white w-full rounded-md text-gray-500 h-9 focus:outline-none px-4 py-2"
         required={required}
         name={name}
         value={selectedValue}

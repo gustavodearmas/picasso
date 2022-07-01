@@ -13,9 +13,9 @@ const DropDownOutLabel = ({ name, defaultValue="", required, options, verify }) 
   }, [defaultValue]);
   //console.log("selectedValue: ", selectedValue)
   return (
-    <div className="items-center my-1">
+    <div className="items-center my-1 text-sm">
       <select
-        className="bg-white rounded-md text-gray-600 px-2 py-1 focus:outline-none text-xs w-full"
+        className="bg-white rounded-md text-gray-600 px-2 py-1 focus:outline-none w-full"
         required={required}
         name={name}
         value={selectedValue}

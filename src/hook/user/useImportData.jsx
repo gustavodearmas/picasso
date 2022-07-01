@@ -19,7 +19,7 @@ const useImportData = (file, mutation, validateKeyExcel, runImportExcel) => {
   };
 
   const readExcel = (file) => {
-    console.log("b");
+    //console.log("b");
     const promise = new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsArrayBuffer(file);
@@ -38,9 +38,9 @@ const useImportData = (file, mutation, validateKeyExcel, runImportExcel) => {
     });
     if (runImportExcel) {
       promise.then((d) => {
-        console.log("jj", d);
+        //console.log("jj", d);
         d.forEach((u) => {
-          console.log("ee: ", u)
+          //console.log("ee: ", u)
           mutation({ variables: u })
             .then((a) => {})
             .catch((e) => {

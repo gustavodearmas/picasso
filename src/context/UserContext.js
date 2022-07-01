@@ -15,18 +15,19 @@ const UserProvider = ({ children }) => {
   const [statusFilter, setStatusFilter] = useState("TODOS");
   const [createUser, setCreateUser] = useState(null);
   const [editUser, setEditUser] = useState(false);
-  const { data, error, loading, refetch } = useQuery(GET_USERS);
-  const [listUserFiltered, setListUserFiltered] = useState(data);
+  const [importUser, setImportUser] = useState(false);
   const [search, setSearch] = useState("");
   const [_id, setID] = useState("");
   const [byId, setById] = useState(false);
   const [listToPDF, setListToPDF] = useState([]);
+  
+  const { data, error, loading, refetch } = useQuery(GET_USERS);
   const {
     data: dataQueryOneUserById,
     error: errorQueryOneUserById,
     loading: loadingQueryOneUserById,
+    refetch: refetchQueryOneUserById,
   } = useQuery(GET_USER_BY_ID, { variables: { _id } });
-
   const {
     data: dataQueryManyUserById,
     error: errorQueryManyUserById,
@@ -35,10 +36,14 @@ const UserProvider = ({ children }) => {
     variables: { _id: filterObjectOnlyId(listToPDF) },
   });
 
+  const [listUserFiltered, setListUserFiltered] = useState(data);
+
   useEffect(() => {
     if (data) {
+      refetch();
       setListUserFiltered(data.Users);
       setID(data.Users[0]._id);
+     
     }
   }, [data]);
 
@@ -60,6 +65,8 @@ const UserProvider = ({ children }) => {
         setCreateUser,
         editUser,
         setEditUser,
+        importUser, 
+        setImportUser,
         data,
         error,
         loading,
@@ -79,7 +86,8 @@ const UserProvider = ({ children }) => {
         setListToPDF,
         preViewPDF,
         setPreViewPDF,
-        dataQueryManyUserById
+        dataQueryManyUserById, 
+        refetchQueryOneUserById
       }}
     >
       {children}

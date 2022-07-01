@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import AvatarImage from "../../images/no-avatar.png";
 import ButtonBorder from "../../components/buttoms/buttonBorder";
 import ButtonBackground from "../../components/buttoms/ButtonBackground";
+import ButtonBgLarge from "../../components/buttoms/ButtonBgLarge";
 import Line from "../../components/ultils/Line";
-import IconKeyValue from "../../components/user/iconKeyValue";
+import KeyValue from "../../components/user/KeyValue";
 import IconKeyValueX2 from "../../components/user/iconKeyValueX2";
 import IconKeyValue2x1 from "../../components/user/iconKeyValue2x1";
 import { calculateAge } from "../../utils/generalFunctions";
@@ -14,14 +15,21 @@ import DisableRecord from "../../components/ultils/DisableRecord";
 import UserContext from "../../context/UserContext";
 import EditUser from "./EditUser";
 import SendMail from "../../components/ultils/SendMail";
+import { Test2 } from "./Test2";
 
 const CardDetailData = () => {
   const [disableUser, { data, error }] = useMutation(DISABLE_USER);
   const [disable, setDisable] = useState(false);
   const [sendMail, setSendMail] = useState(false);
-  const {setEditUser, editUser, _id, dataQueryOneUserById, refetch } = useContext(UserContext);
-  //console.log("dataQueryOneUserById", dataQueryOneUserById)
-
+  const {
+    setEditUser,
+    editUser,
+    _id,
+    dataQueryOneUserById,
+    refetch,
+    setCreateUser,
+  } = useContext(UserContext);
+  console.log("dataQueryOneUserById", dataQueryOneUserById);
 
   useEffect(() => {
     if (error) {
@@ -40,187 +48,253 @@ const CardDetailData = () => {
   }, [data]);
 
   return (
-    <div className="shadow-md rounded flex-1 bg-gray-50 px-4 py-8 overflow-auto">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center ">
+    <div className="flex-col shadow-md rounded bg-gray-50 py-4 overflow-auto lg:w-6/12 xl:w-8/12">
+      {/* Header */}
+      <div className="flex justify-end px-7 lg:h-7">
+        <ButtonBorder
+          cssAdd={"lg:hidden rounded-2xl"}
+          icon="fas fa-plus text-xxs"
+          onclick={() => {
+            setCreateUser(true);
+          }}
+        />
+      </div>
+      {/* End-Header */}
+      <Line />
+
+      {/* UserPicture */}
+      <div className="xl:flex xl:justify-between pt-4 divide-x divide-gray-200">
+        <div className="flex items-center px-7">
           <img
-            className="h-12 w-12 bg-white rounded-full"
+            className="h-20 w-20 bg-white rounded-full"
             src={AvatarImage}
             alt=""
           />
-          <div className="flex flex-col">
-            <span className="ml-2 text-sm font-extrabold">
-              Gustavo de Armas
+          <div className="pl-4 ">
+            <span className="flex font-black text-base text-menta-200">
+              {dataQueryOneUserById &&
+                dataQueryOneUserById.User.nameUser +
+                  " " +
+                  dataQueryOneUserById.User.lastName}
             </span>
-            <span className="ml-2 text-xs italic">18 dic de 2021</span>
+            <span className="flex font-bold text-sm">
+              {dataQueryOneUserById &&
+                "Id." + " " + dataQueryOneUserById.User.identification}
+            </span>
           </div>
         </div>
-        <div className="">
-          <ButtonBackground
+        <div className="flex justify-end text-sm mt-2 xl:h-5 self-end pr-10">
+          <ButtonBgLarge
+            icon="far fa-paper-plane"
+            bg="bg-gray-600"
             text="Email"
-            icon="fas fa-envelope-open-text pr-2"
-            onclick={()=>setSendMail(true)}
+            cssAdd="hover:border-parotia-3 hover:text-parotia-3"
+            onclick={() => setSendMail(true)}
             type="button"
+          />
+          <ButtonBgLarge
+            icon="far fa-edit"
+            text="Editar"
+            cssAdd="hover:border-parotia-3 hover:text-parotia-3"
+            onclick={() => {
+              setEditUser(true);
+            }}
+          />
+          <ButtonBgLarge
+            bg="bg-red-500"
+            icon="far fa-trash-alt"
+            text="Borrar"
+            cssAdd="hover:border-red-400 hover:text-red-400"
+            onclick={() => {
+              setDisable(true);
+            }}
           />
         </div>
       </div>
-      <div className="flex flex-row justify-end h-auto -mt-2">
-        <ButtonBorder
-          icon="far fa-edit"
-          cssAdd="mr-1 hover:border-parotia-3 hover:text-parotia-3"
-          onclick={() => {
-            setEditUser(true);
-          }}
-        />
-        <ButtonBorder
-          icon="far fa-trash-alt"
-          cssAdd="hover:border-red-400 hover:text-red-400"
-          onclick={() => {
-            setDisable(true);
-          }}
-        />
-      </div>
       <Line />
-      <div className="px-2 pt-4">
-        <IconKeyValue
-          icon="fas fa-id-badge"
-          key_="Identificación"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.identification}
-        />
-        <IconKeyValue2x1
-          icon="fas fa-user"
-          key_="Nombre"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.nameUser}
-          value_2={dataQueryOneUserById && dataQueryOneUserById.User.lastName}
-          value_3=""
-        />
-        <IconKeyValue
-          icon="fas fa-id-badge"
-          key_="Ciudad de Nacimiento"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.cityBirth}
-        />
-        <IconKeyValue
-          icon="fas fa-id-badge"
-          key_="Nacionalidad"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.nationality}
-        />
-        <IconKeyValueX2
-          icon="fas fa-birthday-cake"
-          key_="Fecha de Nacimiento"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.birthDay.slice(0, 10)}
-          value_2={
-            dataQueryOneUserById && calculateAge(dataQueryOneUserById.User.birthDay.slice(0, 10))
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-syringe"
-          key_="RH"
-          value_={
-            dataQueryOneUserById && dataQueryOneUserById.User.rh && dataQueryOneUserById.User.rh.replace("_", " ")
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-envelope"
-          key_="Email"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.email}
-        />
-        <IconKeyValueX2
-          icon="fas fa-phone-alt"
-          key_="Teléfono"
-          value_="3286212"
-          value_2={dataQueryOneUserById && dataQueryOneUserById.User.phone}
-        />
-        <IconKeyValue
-          icon="fas fa-medkit"
-          key_="EPS"
-          value_={
-            dataQueryOneUserById && dataQueryOneUserById.User.eps && dataQueryOneUserById.User.eps.replace("_", " ")
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-hand-holding-usd"
-          key_="ARL"
-          value_={
-            dataQueryOneUserById && dataQueryOneUserById.User.arl && dataQueryOneUserById.User.arl.replace("_", " ")
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-blind"
-          key_="AFP"
-          value_={
-            dataQueryOneUserById && dataQueryOneUserById.User.afp && dataQueryOneUserById.User.afp.replace("_", " ")
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-map-marker-alt"
-          key_="Dirección"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.address}
-        />
-        <IconKeyValue
-          icon="fas fa-arrow-alt-circle-up"
-          key_="Estrato"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.strata}
-        />
-        <IconKeyValueX2
-          icon="fas fa-map-marked-alt"
-          key_="UPZ/Localidad"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.upz}
-          value_2={
-            dataQueryOneUserById &&
-            dataQueryOneUserById.User.locality &&
-            dataQueryOneUserById.User.locality.replace("_", " ")
-          }
-        />
-        <IconKeyValue
-          icon="fas fa-arrow-alt-circle-up"
-          key_="Contato de Emergencia"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.emergencyContact}
-        />
-      </div>
-      <Line />
-      <h6 className="text-xs font-bold mt-4 mb-4">Acudiente</h6>
-      <div className="px-2 pt-4">
-        <IconKeyValue2x1
-          icon="fas fa-user"
-          key_="Nombre"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.nameGuardian}
-          value_2={dataQueryOneUserById && dataQueryOneUserById.User.lastNameGuardian}
-          value_3=""
-        />
-        <IconKeyValue
-          icon="fas fa-id-badge"
-          key_="Identificación"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.identificationGuardian}
-        />
-        <IconKeyValue
-          icon="fas fa-users"
-          key_="Parentesco"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.issuance}
-        />
+      {/* UserPicture */}
 
-        <IconKeyValue
-          icon="fas fa-map-marker-alt"
-          key_="Dirección"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.addressGuardian}
-        />
-        <IconKeyValue
-          icon="fas fa-envelope"
-          key_="Email"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.emailGuardian}
-        />
-        <IconKeyValue
-          icon="fas fa-phone-alt"
-          key_="Teléfono"
-          value_={dataQueryOneUserById && dataQueryOneUserById.User.phoneGuardian}
-        />
+      {/* UserData */}
+      <div className="xl:flex p-7">
+        <div className="xl:flex-1">
+          <span className="flex text-xs font-bold text-menta-200 mb-2">
+            DATOS PRINCIPALES
+          </span>
+          <KeyValue
+            key_="Ciudad de Nacimiento"
+            value_={dataQueryOneUserById && dataQueryOneUserById.User.cityBirth}
+          />
+          <KeyValue
+            key_="Nacionalidad"
+            value_={
+              dataQueryOneUserById && dataQueryOneUserById.User.nationality
+            }
+          />
+          <KeyValue
+            key_="Fecha de Nacimiento"
+            value_={
+              dataQueryOneUserById &&
+              dataQueryOneUserById.User.birthDay.slice(0, 10)
+            }
+          />
+          <KeyValue
+            key_="Edad"
+            value_={
+              dataQueryOneUserById &&
+              calculateAge(dataQueryOneUserById.User.birthDay.slice(0, 10)) +
+                " años"
+            }
+          />
+          <KeyValue
+            key_="Email"
+            value_={dataQueryOneUserById && dataQueryOneUserById.User.email}
+          />
+          <KeyValue
+            key_="Teléfono"
+            value_="3286212"
+            value_2={dataQueryOneUserById && dataQueryOneUserById.User.phone}
+          />
+          <KeyValue
+            key_="Dirección"
+            value_={dataQueryOneUserById && dataQueryOneUserById.User.address}
+          />
+          <KeyValue
+            key_="Estrato"
+            value_={dataQueryOneUserById && dataQueryOneUserById.User.strata}
+          />
+          <KeyValue
+            key_="UPZ"
+            value_={dataQueryOneUserById && dataQueryOneUserById.User.upz}
+            value_2={
+              dataQueryOneUserById &&
+              dataQueryOneUserById.User.locality &&
+              dataQueryOneUserById.User.locality.replace("_", " ")
+            }
+          />
+          <KeyValue
+            key_="Localidad"
+            value_={
+              dataQueryOneUserById &&
+              dataQueryOneUserById.User.locality &&
+              dataQueryOneUserById.User.locality.replace("_", " ")
+            }
+          />
+          <KeyValue
+            key_="Contato de Emergencia"
+            value_={
+              dataQueryOneUserById && dataQueryOneUserById.User.emergencyContact
+            }
+          />
+        </div>
+        <div className="xl:flex-1">
+          <div className="xl:hidden">
+            <Line />
+          </div>
+          <span className="flex text-xs font-bold text-menta-200 xl:mt-0 mt-7 mb-2">
+            DATOS ADICIONALES
+          </span>
+          <div className="">
+            <KeyValue
+              key_="RH"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.rh &&
+                dataQueryOneUserById.User.rh.replace("_", " ")
+              }
+            />
+            <KeyValue
+              key_="EPS"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.eps &&
+                dataQueryOneUserById.User.eps.replace("_", " ")
+              }
+            />
+            <KeyValue
+              key_="ARL"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.arl &&
+                dataQueryOneUserById.User.arl.replace("_", " ")
+              }
+            />
+            <KeyValue
+              key_="AFP"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.afp &&
+                dataQueryOneUserById.User.afp.replace("_", " ")
+              }
+            />
+          </div>
+          <Line />
+          <span className="flex text-xs font-bold text-menta-200 mt-7 mb-2">
+            CONTACTO DE EMERGENCIA
+          </span>
+          <div className="">
+            <KeyValue
+              key_="Nombre"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.nameGuardian +
+                  " " +
+                  dataQueryOneUserById.User.lastNameGuardian
+              }
+            />
+            <KeyValue
+              key_="Identificación"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.identificationGuardian
+              }
+            />
+            <KeyValue
+              key_="Parentesco"
+              value_={
+                dataQueryOneUserById && dataQueryOneUserById.User.issuance
+              }
+            />
+            <KeyValue
+              key_="Dirección"
+              value_={
+                dataQueryOneUserById &&
+                dataQueryOneUserById.User.addressGuardian
+              }
+            />
+            <KeyValue
+              key_="Email"
+              value_={
+                dataQueryOneUserById && dataQueryOneUserById.User.emailGuardian
+              }
+            />
+            <KeyValue
+              key_="Teléfono"
+              value_={
+                dataQueryOneUserById && dataQueryOneUserById.User.phoneGuardian
+              }
+            />
+          </div>
+        </div>
       </div>
       {disable ? (
-        <DisableRecord mutation={disableUser} id={_id} setDisable={setDisable} refetch={refetch} />
+        <DisableRecord
+          mutation={disableUser}
+          id={_id}
+          setDisable={setDisable}
+          refetch={refetch}
+        />
       ) : (
         <></>
       )}
       {editUser ? <EditUser /> : <></>}
-      {sendMail ? <SendMail setSendMail={setSendMail} email={dataQueryOneUserById.User.email}/> : <></>}
+      {sendMail ? (
+        <SendMail
+          setSendMail={setSendMail}
+          email={dataQueryOneUserById.User.email}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

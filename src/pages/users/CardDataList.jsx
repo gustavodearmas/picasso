@@ -37,12 +37,12 @@ const CardDataList = () => {
   }, [statusFilter, data, setListUserFiltered]);
 
   return (
-    <div className="md:flex hidden flex-1">
+    <div className="hidden lg:flex flex-1 lg:w-6/12 xl:w-4/12">
       <div className="h-full w-full shadow-md rounded mr-1 bg-gray-50">
         <div className="h-3/24 text-xs font-bold divide-y divide-gray-200 pt-8">
           <div className="flex flex-wrap w-full content-end justify-between px-4">
             <div>
-              <label htmlFor="" className="mr-1">
+              <label htmlFor="" className=" font-black text-menta-200">
                 Filtro:
               </label>
               <select
@@ -109,6 +109,8 @@ const ItemsUser = ({
   setListToPDF,
 }) => {
   const [check, setCheck] = useState(false);
+  const [targeValue, setTargetValue] = useState(Boolean);
+  console.log("targeValue", targeValue)
 
   useEffect(() => {
     if (check) {
@@ -124,8 +126,6 @@ const ItemsUser = ({
     }
   }, [check]);
 
-  
-
   const byIdF = () => {
     if (byId) {
       //console.log("card", byId)
@@ -136,6 +136,7 @@ const ItemsUser = ({
       setSearch("");
     }
   };
+
   return (
     <div className="bg-gray-50 hover:bg-gray-100">
       <div className="flex flex-row h-12 items-center px-4">
@@ -161,14 +162,12 @@ const ItemsUser = ({
               />
             </div>
           </div>
-          <div className="w-17/24 mx-1">
-            <span className="text-xs">
+          <div className="w-20/24 mx-1">
+            <span className="text-xs font-black text-menta-200">
               {nameUser} {lastName}
             </span>
           </div>
-          <div className="w-3/24 mx-1">
-            <span className="text-xxs italic">{statusUser}</span>
-          </div>
+      
           <div className="h-1/24">
             {statusUser === Enum_StatusUsers.ACTIVO ? (
               <div className="h-2 w-2 rounded-full border-2 border-green-400"></div>

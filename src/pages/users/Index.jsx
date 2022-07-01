@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <UserProvider >
       <HeaderContent />
-      <div className="h-full flex flex-col lg:flex-row mt-4">
+      <div className="flex flex-col lg:flex-row mt-4 h-full">
         <CardDataList />
         <CardDetailData />
       </div>

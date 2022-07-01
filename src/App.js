@@ -17,7 +17,7 @@ import Test from "./pages/users/Test";
 
 
 const client = new ApolloClient({
-  uri: "http://localhost:4001/graphql",
+  uri: "http://192.168.43.216:4001/graphql",
   cache: new InMemoryCache()
 });
 
@@ -31,7 +31,6 @@ function App() {
             <Route path="users/" element={<Index />} />
             <Route path="users/sendmail" element={<SendMail />} />
             <Route path="users/filter-data" element={<IndexR />} />
-           
           </Route>
           <Route path="/test" element={<Test />} />
         </Routes>
