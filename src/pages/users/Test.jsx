@@ -1,60 +1,95 @@
-import React, { useState, useEffect } from "react";
-import {
-  GET_USERS
-} from "../../graphql/user/querys";
-import { useQuery } from "@apollo/client";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
+import { subDays } from "date-fns";
 
 const Test = () => {
-  const { data, error, loading, refetch } = useQuery(GET_USERS);
-  //console.log("data: ", data)
-  
-  useEffect(() => {
-    if (data) {
-     // console.log("data: ", data)
-    }
-  }, [data]);
+  const [startDate, setStartDate] = useState(new Date());
+  const highlightWithRanges = [
+    // {
+    //   "react-datepicker__day--highlighted-custom-1": [
+    //     subDays(new Date(), 4),
+    //     subDays(new Date(), 3),
+    //     subDays(new Date(), 2),
+    //     subDays(new Date(), 1),
+    //   ],
+    // },
+    {
+      "react-datepicker__day--highlighted-custom-2": [
+        addDays(new Date(), 31),
+        addDays(new Date(), 32),
+        addDays(new Date(), 34),
+        addDays(new Date(), 36),
+      ],
+    },
+  ];
 
-  useEffect(() => {
-    if (error) {
-      //console.log("error: ", error)
-    }
-  }, [error]);
-  // var cadena = "";
-  // const [contador, setContador] = useState(false);
-  // const [lista, setLista] = useState([]);
-  // let o =
-  //   "( $nameUser: String! $lastName: String! $nationality: String) {createUser(nameUser: $nameUser lastmeUser}}";
-  //   console.log("lista2: ", lista);
-   
-  // useEffect(() => {
-  //   for (let c of o) {
-  //       console.log("c: ", c);
-  //     if (c === "$") {
-  //       setContador(true);
-  //       console.log("contador: ", contador);
-  //     }else{
-  //         console.log("")
-  //     }
-  //     if (contador === true) {
-  //       cadena = `${cadena}` + `${c}`;
-  //       console.log("cadena: ", cadena);
-  //     }else{
-  //       console.log("")
-  //     }
-  //     if (c === "!") {
-  //       setLista([...lista, cadena]);
-  //       cadena = "";
-  //       setContador(false);
-  //       console.log("contador: ", contador);
-  //     }else{
-  //       console.log("")
-  //     }
+  return (
+    <div className="h-full w-full bg-gray-400">
+      
+    <a href="">hola</a>
+    <DatePicker
+      selected={startDate}
+      onChange={(date) => setStartDate(date)}
+      highlightDates={highlightWithRanges}
+      placeholderText="This highlight two ranges with custom classes"
 
+      renderCustomHeader={({
+        monthDate,
+        customHeaderCount,
+        decreaseMonth,
+        increaseMonth,
+      }) => (
+        <div>
+          <button
+            aria-label="Previous Month"
+            className={
+              "react-datepicker__navigation react-datepicker__navigation--previous"
+            }
+            style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
+            onClick={decreaseMonth}
+          >
+            <span
+              className={
+                "react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"
+              }
+            >
+              {"<"}
+            </span>
+          </button>
+          <span className="react-datepicker__current-month">
+            {monthDate.toLocaleString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}
+          </span>
+          <button
+            aria-label="Next Month"
+            className={
+              "react-datepicker__navigation react-datepicker__navigation--next"
+            }
+            style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
+            onClick={increaseMonth}
+          >
+            <span
+              className={
+                "react-datepicker__navigation-icon react-datepicker__navigation-icon--next"
+              }
+            >
+              {">"}
+            </span>
+          </button>
+        </div>
+      )}
+      monthsShown={2}
+    />
+     <DatePicker
+     
+    />
     
-  //   }
-  // }, []);
-
-  return <div>hola</div>;
+   </div>
+   );
 };
 
 export default Test;

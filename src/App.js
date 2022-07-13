@@ -10,6 +10,7 @@ import {
 import SendMail from "./components/ultils/SendMail";
 import IndexR from "./pages/users/reports/IndexR";
 import Test from "./pages/users/Test";
+import { Test2 } from "./pages/users/Test2";
 // const httpLink = createHttpLink({
 //   // uri: 'https://servidor-gql-mintic.herokuapp.com/graphql',
 //   uri: 'http://localhost:4001/graphql',
@@ -17,7 +18,7 @@ import Test from "./pages/users/Test";
 
 
 const client = new ApolloClient({
-  uri: "http://192.168.43.216:4001/graphql",
+  uri: "http://172.20.10.2:4001/graphql",
   cache: new InMemoryCache()
 });
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="users/filter-data" element={<IndexR />} />
           </Route>
           <Route path="/test" element={<Test />} />
+          <Route path="/test2" element={<Test2 />} />
         </Routes>
       </BrowserRouter>
     </ApolloProvider>
